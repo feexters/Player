@@ -11,25 +11,17 @@ import {
   StatusBar,
   SafeAreaView,
 } from 'react-native';
-import {getId} from '@lib/utils';
-
-interface DeskData {
-  id: string;
-  value: string;
-}
+import { useAppDispatch, useAppSelector } from '@lib/hooks';
+import { addColumn } from '@store';
 
 const Desk = () => {
   const [isVisibleInput, setIsVisibleInput] = useState(false);
-  const [desks, setDesks] = useState<DeskData[]>([]);
+  const dispatch = useAppDispatch();
+  const {columns} = useAppSelector(state => state);
 
   const addDesk = (value: string) => {
     if (value.trim()) {
-      const newDesk: DeskData = {
-        id: getId(),
-        value,
-      };
-
-      setDesks(prev => [...prev, newDesk]);
+      dispatch(addColumn({title: value}));
     }
   };
 
@@ -58,10 +50,10 @@ const Desk = () => {
       </View>
       <View style={styles.listTodo}>
         <FlatList
-          data={desks}
+          data={columns.list}
           renderItem={({item}) => (
             <Text style={styles.todo} key={item.id}>
-              {item.value}
+              {item.title}
             </Text>
           )}
         />

@@ -9,7 +9,8 @@
                 "alias": {
                     "@assets": "./src/assets",
                     "@lib": "./src/lib",
-                    "@components": "./src/components"
+                    "@components": "./src/components",
+                    "@store": "./src/store"
                 }
             }
         ]
