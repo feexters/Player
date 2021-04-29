@@ -1,13 +1,12 @@
-// /* eslint-disable prettier/prettier *
 import React from 'react';
-import {Desk} from '@components/Desk';
 import {Provider} from 'react-redux';
 import {store} from '@store';
+import {Home} from '@components/Home';
 
 const App = () => {
   return (
     <Provider store={store}>
-      <Desk />
+      <Home />
     </Provider>
   );
 };
