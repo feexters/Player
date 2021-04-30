@@ -11,23 +11,24 @@ import {
   StatusBar,
   SafeAreaView,
 } from 'react-native';
-import { useAppDispatch, useAppSelector } from '@lib/hooks';
-import { addColumn } from '@store';
+import {useAppDispatch, useAppSelector} from '@lib/hooks';
+import ColumnPreview from './components/ColumnPreview/ColumnPreview';
+import {createColumn} from '@store/sagas';
 
 const Desk = () => {
   const [isVisibleInput, setIsVisibleInput] = useState(false);
   const dispatch = useAppDispatch();
   const {columns} = useAppSelector(state => state);
 
-  const addDesk = (value: string) => {
+  const onCreateColumn = (value: string) => {
     if (value.trim()) {
-      dispatch(addColumn({title: value}));
+      dispatch(createColumn({title: value, description: ''}));
     }
   };
 
   return (
     <SafeAreaView style={styles.container}>
-      <StatusBar hidden/>
+      <StatusBar backgroundColor={'white'} barStyle={'dark-content'} />
       <View style={styles.header}>
         {!isVisibleInput ? (
           <>
@@ -42,7 +43,7 @@ const Desk = () => {
           <TextInput
             style={styles.deskInput}
             placeholder="Add a desk..."
-            onSubmitEditing={event => addDesk(event.nativeEvent.text)}
+            onSubmitEditing={event => onCreateColumn(event.nativeEvent.text)}
             onBlur={() => setIsVisibleInput(!isVisibleInput)}
             autoFocus
           />
@@ -51,11 +52,7 @@ const Desk = () => {
       <View style={styles.listTodo}>
         <FlatList
           data={columns.list}
-          renderItem={({item}) => (
-            <Text style={styles.todo} key={item.id}>
-              {item.title}
-            </Text>
-          )}
+          renderItem={({item}) => <ColumnPreview key={item.id} column={item} />}
         />
       </View>
     </SafeAreaView>
@@ -69,6 +66,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignContent: 'flex-end',
     flexDirection: 'column',
+    backgroundColor: 'white',
   },
   header: {
     width: '100%',
@@ -78,6 +76,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around',
     flexDirection: 'row',
     borderBottomWidth: 1,
+    backgroundColor: 'white',
     borderBottomColor: 'rgb(229, 229, 229)',
   },
   headerText: {
@@ -96,22 +95,13 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
     paddingVertical: 5,
   },
-  todo: {
-    width: '100%',
-    paddingHorizontal: 15,
-    paddingVertical: 20,
-    borderColor: 'rgb(229, 229, 229)',
-    borderWidth: 1,
-    borderRadius: 4,
-    marginTop: 10,
-    fontSize: 17,
-  },
   deskInput: {
     flex: 1,
     borderColor: 'rgb(229, 229, 229)',
     borderWidth: 1,
     borderRadius: 10,
-    padding: 15,
+    fontSize: 17,
+    padding: 10,
   },
 });
 

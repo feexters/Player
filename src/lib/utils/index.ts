@@ -1,1 +1,1 @@
-export {default as getId} from './get-id';
+export {default as Auth} from './auth';

@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
   Text,
   View,
+  StatusBar,
 } from 'react-native';
 import {authSingUp} from '@store/sagas';
 
@@ -33,6 +34,8 @@ const SignUp = ({navigation}: NavigationProps) => {
 
   return (
     <SafeAreaView style={styles.container}>
+      <StatusBar backgroundColor={'white'} barStyle={'dark-content'} />
+
       <TextInput
         style={styles.loginInput}
         onSubmitEditing={() => {}}
@@ -73,6 +76,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     padding: 10,
+    backgroundColor: 'white',
   },
   loginInput: {
     width: '100%',

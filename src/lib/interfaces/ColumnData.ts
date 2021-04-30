@@ -1,5 +1,6 @@
-export default interface ColumnData {
-  id: string;
+export interface ColumnData {
+  id: number;
   title: string;
-  description: string;
+  description: string | null;
+  userId: number;
 }
