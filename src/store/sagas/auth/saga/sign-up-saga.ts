@@ -31,9 +31,9 @@ async function fetchSignUp(user: SignUpData) {
   return await axios
     .post('https://prayer.herokuapp.com/auth/sign-up', user)
     .then(response => {
-      const result: string = response.data.name;
-      return result;
-    });
+      return response.data.name;
+    })
+    .catch(e => console.log(e));
 }
 
 export function* watchSignUp() {

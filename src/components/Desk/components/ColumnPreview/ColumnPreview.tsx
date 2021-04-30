@@ -1,4 +1,5 @@
-import {ColumnData} from 'lib/interfaces';
+import {useAppDispatch} from '@lib/hooks';
+import {ColumnData} from '@lib/interfaces';
 import React, {useState} from 'react';
 import {StyleSheet, Text, TouchableOpacity} from 'react-native';
 import {
@@ -7,14 +8,19 @@ import {
   Swipeable,
   TextInput,
 } from 'react-native-gesture-handler';
+import {deleteColumn} from '@store/sagas';
 
 const ColumnPreview: React.FC<{column: ColumnData}> = ({column}) => {
   const [isVisibleInput, setIsVisibleInput] = useState(false);
   const [title, setTitle] = useState(column.title);
+  const dispatch = useAppDispatch();
 
   const renderLeftActions = () => {
     return (
-      <TouchableOpacity onPress={() => {}}>
+      <TouchableOpacity
+        onPress={() => {
+          dispatch(deleteColumn(column.id));
+        }}>
         <Text style={[styles.todo, styles.delete]}>Delete</Text>
       </TouchableOpacity>
     );

@@ -1,6 +1,10 @@
 import {all} from '@redux-saga/core/effects';
 import {watchSignIn, watchSignUp} from './auth';
-import {watchGetAllColumns, watchCreateColumn} from './columns';
+import {
+  watchGetAllColumns,
+  watchCreateColumn,
+  watchDeleteColumn,
+} from './columns';
 
 export default function* rootSaga() {
   yield all([
@@ -8,5 +12,6 @@ export default function* rootSaga() {
     watchSignIn(),
     watchGetAllColumns(),
     watchCreateColumn(),
+    watchDeleteColumn(),
   ]);
 }

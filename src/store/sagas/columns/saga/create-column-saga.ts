@@ -33,7 +33,8 @@ async function fetchCreateColumn(
         Authorization: `Bearer ${token}`,
       },
     })
-    .then(response => response.data);
+    .then(response => response.data)
+    .catch(e => console.log(e));
 }
 
 export function* watchCreateColumn() {

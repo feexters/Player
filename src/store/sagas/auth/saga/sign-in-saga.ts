@@ -32,9 +32,9 @@ async function fetchSignIn(user: SignInData) {
   return await axios
     .post('https://prayer.herokuapp.com/auth/sign-in', user)
     .then(response => {
-      const token: string = response.data.token;
-      return token;
-    });
+      return response.data.token;
+    })
+    .catch(e => console.log(e));
 }
 
 export function* watchSignIn() {

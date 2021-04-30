@@ -19,6 +19,6 @@ export const createColumn = (payload: ColumnActionData) => {
   return {type: COLUMNS_CREATE, payload: payload};
 };
 
-export const deleteColumn = (payload: ColumnActionData) => {
+export const deleteColumn = (payload: number) => {
   return {type: COLUMNS_DELETE, payload: payload};
 };
