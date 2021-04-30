@@ -1,7 +1,7 @@
 import {useAppDispatch} from '@lib/hooks';
 import {ColumnData} from '@lib/interfaces';
 import React, {useState} from 'react';
-import {StyleSheet, Text, TouchableOpacity} from 'react-native';
+import {StyleSheet, Text, TouchableOpacity, Vibration} from 'react-native';
 import {
   LongPressGestureHandler,
   State,
@@ -20,8 +20,9 @@ const ColumnPreview: React.FC<{column: ColumnData}> = ({column}) => {
       <TouchableOpacity
         onPress={() => {
           dispatch(deleteColumn(column.id));
+          Vibration.vibrate([0, 50]);
         }}>
-        <Text style={[styles.todo, styles.delete]}>Delete</Text>
+        <Text style={[styles.column, styles.delete]}>Delete</Text>
       </TouchableOpacity>
     );
   };
@@ -30,8 +31,8 @@ const ColumnPreview: React.FC<{column: ColumnData}> = ({column}) => {
     <>
       {isVisibleInput ? (
         <TextInput
-          style={styles.todo}
-          placeholder="Desk title..."
+          style={[styles.column, styles.columnInput]}
+          placeholder="Column title..."
           onSubmitEditing={() => {
             dispatch(
               updateColumn({
@@ -52,10 +53,11 @@ const ColumnPreview: React.FC<{column: ColumnData}> = ({column}) => {
             onHandlerStateChange={({nativeEvent}) => {
               if (nativeEvent.state === State.ACTIVE) {
                 setIsVisibleInput(!isVisibleInput);
+                Vibration.vibrate([0, 50]);
               }
             }}
             minDurationMs={500}>
-            <Text style={styles.todo}>{column.title}</Text>
+            <Text style={styles.column}>{column.title}</Text>
           </LongPressGestureHandler>
         </Swipeable>
       )}
@@ -64,7 +66,7 @@ const ColumnPreview: React.FC<{column: ColumnData}> = ({column}) => {
 };
 
 const styles = StyleSheet.create({
-  todo: {
+  column: {
     paddingHorizontal: 15,
     paddingVertical: 20,
     flexDirection: 'row',
@@ -74,11 +76,17 @@ const styles = StyleSheet.create({
     marginTop: 10,
     fontSize: 17,
     backgroundColor: 'white',
+    fontFamily: 'SFUIText-Medium',
+  },
+  columnInput: {
+    borderColor: 'rgb(114, 168, 188)',
+    borderWidth: 1,
   },
   delete: {
     color: 'white',
     fontSize: 17,
     backgroundColor: 'rgb(172, 82, 83)',
+    fontFamily: 'SFUIText-Medium',
   },
 });
 

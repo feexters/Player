@@ -38,24 +38,21 @@ const SignUp = ({navigation}: NavigationProps) => {
 
       <TextInput
         style={styles.loginInput}
-        onSubmitEditing={() => {}}
         onChangeText={setEmail}
         value={email}
         placeholder="Email"
       />
       <TextInput
         style={styles.loginInput}
-        onSubmitEditing={() => {}}
         onChangeText={setName}
         value={name}
         placeholder="Name"
       />
       <TextInput
-        style={styles.loginInput}
-        onSubmitEditing={() => {}}
         onChangeText={setPassword}
         value={password}
         secureTextEntry={true}
+        style={styles.loginInput}
         placeholder="Password"
       />
       <TouchableOpacity style={styles.loginButton} onPress={onSignUp}>
@@ -97,6 +94,7 @@ const styles = StyleSheet.create({
   loginButtonText: {
     fontSize: 17,
     color: 'rgb(255, 255, 255)',
+    fontFamily: 'SFUIText-Bold',
   },
   singIn: {
     marginTop: 15,
@@ -106,6 +104,7 @@ const styles = StyleSheet.create({
     color: 'rgb(191, 179, 147)',
     textDecorationLine: 'underline',
     fontSize: 17,
+    fontFamily: 'SFUIText-Light',
   },
 });
 

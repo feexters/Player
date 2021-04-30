@@ -51,6 +51,7 @@ const Desk = () => {
       <View style={styles.listTodo}>
         <FlatList
           data={columns.list}
+          removeClippedSubviews={false}
           renderItem={({item}) => <ColumnPreview key={item.id} column={item} />}
         />
       </View>
@@ -79,7 +80,7 @@ const styles = StyleSheet.create({
     borderBottomColor: 'rgb(229, 229, 229)',
   },
   headerText: {
-    fontFamily: 'SFUIDisplay-Medium',
+    fontFamily: 'SFUIText-Medium',
     fontSize: 17,
   },
   headerPlus: {
@@ -101,6 +102,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     fontSize: 17,
     padding: 10,
+    fontFamily: 'SFUIText-Medium',
   },
 });
 

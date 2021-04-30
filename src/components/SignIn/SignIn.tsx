@@ -41,11 +41,11 @@ const SignIn = ({navigation}: NavigationProps) => {
         placeholder="Email"
       />
       <TextInput
-        style={styles.loginInput}
         onSubmitEditing={() => {}}
         onChangeText={setPassword}
         value={password}
         secureTextEntry={true}
+        style={styles.loginInput}
         placeholder="Password"
       />
 
@@ -90,6 +90,7 @@ const styles = StyleSheet.create({
   loginButtonText: {
     fontSize: 17,
     color: 'rgb(255, 255, 255)',
+    fontFamily: 'SFUIText-Bold',
   },
   singUp: {
     marginTop: 15,
@@ -101,6 +102,7 @@ const styles = StyleSheet.create({
   },
   text: {
     fontSize: 17,
+    fontFamily: 'SFUIText-Light',
   },
 });
 
