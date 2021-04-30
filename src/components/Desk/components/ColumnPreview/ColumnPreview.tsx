@@ -8,7 +8,7 @@ import {
   Swipeable,
   TextInput,
 } from 'react-native-gesture-handler';
-import {deleteColumn} from '@store/sagas';
+import {deleteColumn, updateColumn} from '@store/sagas';
 
 const ColumnPreview: React.FC<{column: ColumnData}> = ({column}) => {
   const [isVisibleInput, setIsVisibleInput] = useState(false);
@@ -32,7 +32,15 @@ const ColumnPreview: React.FC<{column: ColumnData}> = ({column}) => {
         <TextInput
           style={styles.todo}
           placeholder="Desk title..."
-          onSubmitEditing={() => {}}
+          onSubmitEditing={() => {
+            dispatch(
+              updateColumn({
+                id: column.id,
+                title: title,
+                description: column.description,
+              }),
+            );
+          }}
           onBlur={() => setIsVisibleInput(!isVisibleInput)}
           onChangeText={setTitle}
           value={title}

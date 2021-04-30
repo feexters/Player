@@ -5,4 +5,5 @@ export {
   getAllColumns,
   createColumn,
   deleteColumn,
+  updateColumn,
 } from './columns';

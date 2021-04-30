@@ -4,6 +4,7 @@ import {
   watchGetAllColumns,
   watchCreateColumn,
   watchDeleteColumn,
+  watchUpdateColumn,
 } from './columns';
 
 export default function* rootSaga() {
@@ -13,5 +14,6 @@ export default function* rootSaga() {
     watchGetAllColumns(),
     watchCreateColumn(),
     watchDeleteColumn(),
+    watchUpdateColumn(),
   ]);
 }
