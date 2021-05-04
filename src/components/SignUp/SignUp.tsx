@@ -25,77 +25,81 @@ const SignUp = ({navigation}: NavigationProps) => {
   const dispatch = useAppDispatch();
 
   return (
-    <SafeAreaView style={styles.container}>
-      <StatusBar backgroundColor={'white'} barStyle={'dark-content'} />
+    <SafeAreaView style={styles.body}>
+      <View style={styles.container}>
+        <StatusBar backgroundColor={'white'} barStyle={'dark-content'} />
+        <Loader />
 
-      <Loader />
+        <Form
+          onSubmit={value => {
+            const {email, name, password} = value;
+            if (password.trim() && name.trim() && email.trim()) {
+              dispatch(authSingUp({email, password, name}));
+            }
+          }}
+          initialValues={{email: '', name: '', password: ''}}
+          render={({form}) => (
+            <>
+              <Field name="email">
+                {({input}) => (
+                  <TextInput
+                    style={styles.loginInput}
+                    onChangeText={input.onChange}
+                    value={input.value}
+                    autoCapitalize="none"
+                    placeholder="Email"
+                    placeholderTextColor="#9C9C9C"
+                  />
+                )}
+              </Field>
+              <Field name="name">
+                {({input}) => (
+                  <TextInput
+                    style={styles.loginInput}
+                    onChangeText={input.onChange}
+                    value={input.value}
+                    placeholder="Name"
+                    autoCapitalize="none"
+                    placeholderTextColor="#9C9C9C"
+                  />
+                )}
+              </Field>
+              <Field name="password">
+                {({input}) => (
+                  <TextInput
+                    onChangeText={input.onChange}
+                    value={input.value}
+                    secureTextEntry={true}
+                    style={styles.loginInput}
+                    autoCapitalize="none"
+                    placeholder="Password"
+                    placeholderTextColor="#9C9C9C"
+                  />
+                )}
+              </Field>
+              <TouchableOpacity
+                style={styles.loginButton}
+                onPress={() => form.submit()}>
+                <Text style={styles.loginButtonText}>SING UP</Text>
+              </TouchableOpacity>
+            </>
+          )}
+        />
 
-      <Form
-        onSubmit={value => {
-          const {email, name, password} = value;
-          if (password.trim() && name.trim() && email.trim()) {
-            dispatch(authSingUp({email, password, name}));
-          }
-        }}
-        initialValues={{email: '', name: '', password: ''}}
-        render={({form}) => (
-          <>
-            <Field name="email">
-              {({input}) => (
-                <TextInput
-                  style={styles.loginInput}
-                  onChangeText={input.onChange}
-                  value={input.value}
-                  autoCapitalize="none"
-                  placeholder="Email"
-                  placeholderTextColor="#9C9C9C"
-                />
-              )}
-            </Field>
-            <Field name="name">
-              {({input}) => (
-                <TextInput
-                  style={styles.loginInput}
-                  onChangeText={input.onChange}
-                  value={input.value}
-                  placeholder="Name"
-                  autoCapitalize="none"
-                  placeholderTextColor="#9C9C9C"
-                />
-              )}
-            </Field>
-            <Field name="password">
-              {({input}) => (
-                <TextInput
-                  onChangeText={input.onChange}
-                  value={input.value}
-                  secureTextEntry={true}
-                  style={styles.loginInput}
-                  autoCapitalize="none"
-                  placeholder="Password"
-                  placeholderTextColor="#9C9C9C"
-                />
-              )}
-            </Field>
-            <TouchableOpacity
-              style={styles.loginButton}
-              onPress={() => form.submit()}>
-              <Text style={styles.loginButtonText}>SING UP</Text>
-            </TouchableOpacity>
-          </>
-        )}
-      />
-
-      <View style={styles.singIn}>
-        <TouchableOpacity onPress={() => navigation.navigate('SignIn')}>
-          <Text style={styles.singInText}>Sing In</Text>
-        </TouchableOpacity>
+        <View style={styles.singIn}>
+          <TouchableOpacity onPress={() => navigation.navigate('SignIn')}>
+            <Text style={styles.singInText}>Sing In</Text>
+          </TouchableOpacity>
+        </View>
       </View>
     </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
+  body: {
+    flex: 1,
+  },
   container: {
     flex: 1,
     alignItems: 'center',

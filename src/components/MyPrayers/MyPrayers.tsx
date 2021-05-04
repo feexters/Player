@@ -6,7 +6,7 @@ import {TextInput} from 'react-native-gesture-handler';
 const MyPrayers = () => {
   const onCreatePrayer = (value: string) => {
     if (value.trim()) {
-      // dispatch(createColumn({title: value, description: ''}));
+      // dispatch(createPlayer({...}));
     }
   };
 

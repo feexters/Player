@@ -25,72 +25,77 @@ const SignIn = ({navigation}: NavigationProps) => {
   const dispatch = useAppDispatch();
 
   return (
-    <SafeAreaView style={styles.container}>
-      <StatusBar backgroundColor={'white'} barStyle={'dark-content'} />
+    <SafeAreaView style={styles.body}>
+      <View style={styles.container}>
+        <StatusBar backgroundColor={'white'} barStyle={'dark-content'} />
 
-      <Loader />
+        <Loader />
 
-      <Form
-        onSubmit={value => {
-          const {email, password} = value;
-          if (password.trim() && email.trim()) {
-            dispatch(authSingIn({email, password}));
-          }
-        }}
-        initialValues={{email: '', password: ''}}
-        render={({form}) => (
-          <>
-            <Field name="email">
-              {({input}) => (
-                <TextInput
-                  style={styles.loginInput}
-                  onChangeText={input.onChange}
-                  value={input.value}
-                  placeholder="Email"
-                  autoCapitalize="none"
-                  placeholderTextColor="#9C9C9C"
-                />
-              )}
-            </Field>
-            <Field name="password">
-              {({input}) => (
-                <TextInput
-                  onChangeText={input.onChange}
-                  value={input.value}
-                  secureTextEntry={true}
-                  style={styles.loginInput}
-                  placeholder="Password"
-                  autoCapitalize="none"
-                  placeholderTextColor="#9C9C9C"
-                />
-              )}
-            </Field>
-            <TouchableOpacity
-              style={styles.loginButton}
-              onPress={() => form.submit()}>
-              <Text style={styles.loginButtonText}>SIGN IN</Text>
-            </TouchableOpacity>
-          </>
-        )}
-      />
+        <Form
+          onSubmit={value => {
+            const {email, password} = value;
+            if (password.trim() && email.trim()) {
+              dispatch(authSingIn({email, password}));
+            }
+          }}
+          initialValues={{email: '', password: ''}}
+          render={({form}) => (
+            <>
+              <Field name="email">
+                {({input}) => (
+                  <TextInput
+                    style={styles.loginInput}
+                    onChangeText={input.onChange}
+                    value={input.value}
+                    placeholder="Email"
+                    autoCapitalize="none"
+                    placeholderTextColor="#9C9C9C"
+                  />
+                )}
+              </Field>
+              <Field name="password">
+                {({input}) => (
+                  <TextInput
+                    onChangeText={input.onChange}
+                    value={input.value}
+                    secureTextEntry={true}
+                    style={styles.loginInput}
+                    placeholder="Password"
+                    autoCapitalize="none"
+                    placeholderTextColor="#9C9C9C"
+                  />
+                )}
+              </Field>
+              <TouchableOpacity
+                style={styles.loginButton}
+                onPress={() => form.submit()}>
+                <Text style={styles.loginButtonText}>SIGN IN</Text>
+              </TouchableOpacity>
+            </>
+          )}
+        />
 
-      <View style={styles.signUp}>
-        <Text style={styles.text}>Don’t have an account? </Text>
-        <TouchableOpacity onPress={() => navigation.navigate('SignUp')}>
-          <Text style={[styles.signUpText, styles.text]}>Sign up</Text>
-        </TouchableOpacity>
+        <View style={styles.signUp}>
+          <Text style={styles.text}>Don’t have an account? </Text>
+          <TouchableOpacity onPress={() => navigation.navigate('SignUp')}>
+            <Text style={[styles.signUpText, styles.text]}>Sign up</Text>
+          </TouchableOpacity>
+        </View>
       </View>
     </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
+  body: {
+    flex: 1,
+  },
   container: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    padding: 10,
     backgroundColor: 'white',
+    padding: 10,
   },
   loginInput: {
     width: '100%',
