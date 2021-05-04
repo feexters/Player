@@ -2,28 +2,45 @@ import {PlusIcon} from '@assets/images/svg/PlusIcon';
 import React from 'react';
 import {StyleSheet, TouchableOpacity, View} from 'react-native';
 import {TextInput} from 'react-native-gesture-handler';
+import {Form, Field} from 'react-final-form';
 
 const MyPrayers = () => {
-  const onCreatePrayer = (value: string) => {
-    if (value.trim()) {
-      // dispatch(createPlayer({...}));
-    }
-  };
-
   return (
     <View style={styles.container}>
-      <View style={styles.prayerForm}>
-        <TouchableOpacity style={styles.inputButton}>
-          <PlusIcon />
-        </TouchableOpacity>
-        <TextInput
-          style={styles.prayerInput}
-          placeholder="Add a prayer..."
-          placeholderTextColor="#9C9C9C"
-          onSubmitEditing={event => onCreatePrayer(event.nativeEvent.text)}
-          selectionColor="#72A8BC"
-        />
-      </View>
+      <Form
+        onSubmit={value => {
+          const {title} = value;
+          if (title.trim()) {
+            console.log(title);
+            // dispatch(createPrayer({...}));
+          }
+        }}
+        initialValues={{title: ''}}
+        render={({form}) => (
+          <View style={styles.prayerForm}>
+            <TouchableOpacity
+              style={styles.inputButton}
+              onPress={() => {
+                form.submit();
+                form.change('title', '');
+              }}>
+              <PlusIcon />
+            </TouchableOpacity>
+
+            <Field name="title">
+              {({input}) => (
+                <TextInput
+                  style={styles.prayerInput}
+                  placeholder="Add a prayer..."
+                  onChangeText={input.onChange}
+                  onSubmitEditing={() => form.submit()}
+                  placeholderTextColor="#9C9C9C"
+                />
+              )}
+            </Field>
+          </View>
+        )}
+      />
     </View>
   );
 };
