@@ -3,8 +3,8 @@ import axios from 'axios';
 import {Auth} from '@lib/utils';
 import {COLUMNS_CREATE} from '../actions/actions';
 import {ColumnData} from '@lib/interfaces';
-import {addColumn} from '@store/slices';
-import {ColumnActionData} from 'lib/interfaces/ColumnActionData';
+import {addColumn, loading} from '@store/slices';
+import {ColumnActionData} from '@lib/interfaces/ColumnActionData';
 
 interface CreateColumnWorker {
   type: string;
@@ -15,8 +15,10 @@ function* createColumnWorker({
   payload,
 }: CreateColumnWorker): Generator<StrictEffect, void, ColumnData> {
   try {
+    yield put(loading(true));
     const column = yield call(() => fetchCreateColumn(payload));
     yield put(addColumn(column));
+    yield put(loading(false));
   } catch (e) {
     console.error(e);
   }

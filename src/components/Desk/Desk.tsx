@@ -11,23 +11,33 @@ import {
   SafeAreaView,
 } from 'react-native';
 import {useAppDispatch, useAppSelector} from '@lib/hooks';
-import ColumnPreview from './components/ColumnPreview/ColumnPreview';
+import {ColumnPreview} from './components/ColumnPreview';
 import {createColumn} from '@store/sagas';
+import {ColumnData} from '@lib/interfaces';
+import {StackScreenProps} from '@react-navigation/stack';
+import {RootStackParamList} from '@lib/types';
+import {Form, Field} from 'react-final-form';
+import {Loader} from '@components/Loader';
 
-const Desk = () => {
+type NavigationProps = StackScreenProps<RootStackParamList, 'Desk'>;
+
+const Desk: React.FC<NavigationProps> = ({navigation}) => {
   const [isVisibleInput, setIsVisibleInput] = useState(false);
   const dispatch = useAppDispatch();
   const {columns} = useAppSelector(state => state);
 
-  const onCreateColumn = (value: string) => {
-    if (value.trim()) {
-      dispatch(createColumn({title: value, description: ''}));
-    }
+  const onPress = (column: ColumnData) => {
+    navigation.navigate('Column', {
+      column,
+    });
   };
 
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar backgroundColor={'white'} barStyle={'dark-content'} />
+
+      <Loader />
+
       <View style={styles.header}>
         {!isVisibleInput ? (
           <>
@@ -39,20 +49,43 @@ const Desk = () => {
             </TouchableOpacity>
           </>
         ) : (
-          <TextInput
-            style={styles.deskInput}
-            placeholder="Add a desk..."
-            onSubmitEditing={event => onCreateColumn(event.nativeEvent.text)}
-            onBlur={() => setIsVisibleInput(!isVisibleInput)}
-            autoFocus
+          <Form
+            onSubmit={value => {
+              const {title} = value;
+              if (title.trim()) {
+                dispatch(createColumn({title: title, description: ''}));
+              }
+            }}
+            initialValues={{title: ''}}
+            render={({form}) => (
+              <Field name="title">
+                {({input}) => (
+                  <TextInput
+                    style={styles.deskInput}
+                    placeholder="Add a desk..."
+                    onChangeText={input.onChange}
+                    onSubmitEditing={() => form.submit()}
+                    onBlur={() => setIsVisibleInput(!isVisibleInput)}
+                    autoFocus
+                  />
+                )}
+              </Field>
+            )}
           />
         )}
       </View>
+
       <View style={styles.listTodo}>
         <FlatList
           data={columns.list}
           removeClippedSubviews={false}
-          renderItem={({item}) => <ColumnPreview key={item.id} column={item} />}
+          renderItem={({item}) => (
+            <ColumnPreview
+              key={item.id}
+              column={item}
+              onPress={() => onPress(item)}
+            />
+          )}
         />
       </View>
     </SafeAreaView>
@@ -103,6 +136,10 @@ const styles = StyleSheet.create({
     fontSize: 17,
     padding: 10,
     fontFamily: 'SFUIText-Medium',
+  },
+  loader: {
+    position: 'absolute',
+    zIndex: 10,
   },
 });
 

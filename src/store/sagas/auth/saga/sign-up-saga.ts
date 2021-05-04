@@ -4,6 +4,7 @@ import {AUTH_SIGN_UP} from '../actions/actions';
 import {SignUpData} from '@lib/interfaces';
 import axios from 'axios';
 import {authSingIn} from '../actions';
+import {loading} from '@store/slices';
 
 export interface SingUpWorker {
   type: string;
@@ -14,6 +15,7 @@ function* signUpWorker({
   payload,
 }: SingUpWorker): Generator<StrictEffect, void, string> {
   try {
+    yield put(loading(true));
     const response = yield call(() => fetchSignUp(payload));
 
     if (response === 'QueryFailedError') {
@@ -22,6 +24,7 @@ function* signUpWorker({
       const {email, password} = payload;
       yield put(authSingIn({email, password}));
     }
+    yield put(loading(false));
   } catch (e) {
     console.error(e);
   }

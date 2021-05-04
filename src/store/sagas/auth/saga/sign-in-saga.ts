@@ -1,6 +1,6 @@
 import {Alert} from 'react-native';
 import {put, takeEvery, call, StrictEffect} from 'redux-saga/effects';
-import {authorized} from '@store/slices';
+import {authorized, loading} from '@store/slices';
 import {AUTH_SIGN_IN} from '../actions';
 import {SignInData} from '@lib/interfaces';
 import axios from 'axios';
@@ -15,6 +15,7 @@ function* signInWorker({
   payload,
 }: SingInWorker): Generator<StrictEffect, void, string> {
   try {
+    yield put(loading(true));
     const token = yield call(() => fetchSignIn(payload));
 
     if (!token) {
@@ -23,6 +24,7 @@ function* signInWorker({
       yield put(authorized({status: true, token}));
       yield put(getAllColumns());
     }
+    yield put(loading(false));
   } catch (e) {
     console.error(e);
   }

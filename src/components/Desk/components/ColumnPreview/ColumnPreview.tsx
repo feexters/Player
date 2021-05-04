@@ -10,7 +10,12 @@ import {
 } from 'react-native-gesture-handler';
 import {deleteColumn, updateColumn} from '@store/sagas';
 
-const ColumnPreview: React.FC<{column: ColumnData}> = ({column}) => {
+interface ColumnPreviewProps {
+  onPress(): void;
+  column: ColumnData;
+}
+
+const ColumnPreview: React.FC<ColumnPreviewProps> = ({onPress, column}) => {
   const [isVisibleInput, setIsVisibleInput] = useState(false);
   const [title, setTitle] = useState(column.title);
   const dispatch = useAppDispatch();
@@ -57,7 +62,9 @@ const ColumnPreview: React.FC<{column: ColumnData}> = ({column}) => {
               }
             }}
             minDurationMs={500}>
-            <Text style={styles.column}>{column.title}</Text>
+            <Text onPress={() => onPress()} style={styles.column}>
+              {column.title}
+            </Text>
           </LongPressGestureHandler>
         </Swipeable>
       )}

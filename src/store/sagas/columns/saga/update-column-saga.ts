@@ -2,7 +2,8 @@ import {put, takeEvery, call} from 'redux-saga/effects';
 import axios from 'axios';
 import {Auth} from '@lib/utils';
 import {COLUMNS_UPDATE, getAllColumns} from '../actions';
-import {ColumnUpdateData} from 'lib/interfaces';
+import {ColumnUpdateData} from '@lib/interfaces';
+import {loading} from '@store/slices';
 
 interface UpdateColumnWorker {
   type: string;
@@ -11,8 +12,10 @@ interface UpdateColumnWorker {
 
 function* updateColumnWorker({payload}: UpdateColumnWorker) {
   try {
+    yield put(loading(true));
     yield call(() => fetchUpdateColumn(payload));
     yield put(getAllColumns());
+    yield put(loading(false));
   } catch (e) {
     console.error(e);
   }

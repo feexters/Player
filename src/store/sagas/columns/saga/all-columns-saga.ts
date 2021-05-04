@@ -3,12 +3,14 @@ import axios from 'axios';
 import {Auth} from '@lib/utils';
 import {COLUMNS_GET_ALL} from '../actions/actions';
 import {ColumnData} from '@lib/interfaces';
-import {setColumns} from '@store/slices';
+import {loading, setColumns} from '@store/slices';
 
 function* getAllColumnsWorker(): Generator<StrictEffect, void, ColumnData[]> {
   try {
+    yield put(loading(true));
     const columns = yield call(() => fetchAllColumns());
     yield put(setColumns(columns));
+    yield put(loading(false));
   } catch (e) {
     console.error(e);
   }

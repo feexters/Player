@@ -10,7 +10,8 @@
                     "@assets": "./src/assets",
                     "@lib": "./src/lib",
                     "@components": "./src/components",
-                    "@store": "./src/store"
+                    "@store": "./src/store",
+                    "@screens": "./src/screens"
                 }
             }
         ]

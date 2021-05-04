@@ -5,6 +5,8 @@ import {createStackNavigator} from '@react-navigation/stack';
 import {Desk} from '@components/Desk';
 import {useAppSelector} from '@lib/hooks';
 import React from 'react';
+import {Column} from '@screens/Column';
+import {StyleSheet} from 'react-native';
 
 const Stack = createStackNavigator();
 
@@ -14,7 +16,21 @@ const Home = () => {
   return (
     <>
       {authorized ? (
-        <Desk />
+        <NavigationContainer>
+          <Stack.Navigator
+            screenOptions={{
+              headerTitleStyle: styles.headerTitle,
+              headerLeft: () => null,
+              headerStyle: styles.header,
+            }}>
+            <Stack.Screen
+              name="Desk"
+              component={Desk}
+              options={{headerShown: false}}
+            />
+            <Stack.Screen name="Column" component={Column} />
+          </Stack.Navigator>
+        </NavigationContainer>
       ) : (
         <NavigationContainer>
           <Stack.Navigator>
@@ -34,5 +50,17 @@ const Home = () => {
     </>
   );
 };
+
+const styles = StyleSheet.create({
+  header: {
+    backgroundColor: 'white',
+    shadowOpacity: 0,
+    elevation: 0,
+  },
+  headerTitle: {
+    alignSelf: 'center',
+    fontSize: 17,
+  },
+});
 
 export default Home;

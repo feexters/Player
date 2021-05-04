@@ -1,6 +1,7 @@
 import {StackScreenProps} from '@react-navigation/stack';
 import {useAppDispatch} from '@lib/hooks';
-import React, {useState} from 'react';
+import React from 'react';
+import {Form, Field} from 'react-final-form';
 import {
   SafeAreaView,
   TextInput,
@@ -11,6 +12,7 @@ import {
   StatusBar,
 } from 'react-native';
 import {authSingUp} from '@store/sagas';
+import {Loader} from '@components/Loader';
 
 type RootStackParamList = {
   SignIn: undefined;
@@ -20,44 +22,70 @@ type RootStackParamList = {
 type NavigationProps = StackScreenProps<RootStackParamList, 'SignUp'>;
 
 const SignUp = ({navigation}: NavigationProps) => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [name, setName] = useState('');
-
   const dispatch = useAppDispatch();
-
-  const onSignUp = () => {
-    if (password.trim() && name.trim() && email.trim()) {
-      dispatch(authSingUp({email, password, name}));
-    }
-  };
 
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar backgroundColor={'white'} barStyle={'dark-content'} />
 
-      <TextInput
-        style={styles.loginInput}
-        onChangeText={setEmail}
-        value={email}
-        placeholder="Email"
+      <Loader />
+
+      <Form
+        onSubmit={value => {
+          const {email, name, password} = value;
+          if (password.trim() && name.trim() && email.trim()) {
+            dispatch(authSingUp({email, password, name}));
+          }
+        }}
+        initialValues={{email: '', name: '', password: ''}}
+        render={({form}) => (
+          <>
+            <Field name="email">
+              {({input}) => (
+                <TextInput
+                  style={styles.loginInput}
+                  onChangeText={input.onChange}
+                  value={input.value}
+                  autoCapitalize="none"
+                  placeholder="Email"
+                  placeholderTextColor="#9C9C9C"
+                />
+              )}
+            </Field>
+            <Field name="name">
+              {({input}) => (
+                <TextInput
+                  style={styles.loginInput}
+                  onChangeText={input.onChange}
+                  value={input.value}
+                  placeholder="Name"
+                  autoCapitalize="none"
+                  placeholderTextColor="#9C9C9C"
+                />
+              )}
+            </Field>
+            <Field name="password">
+              {({input}) => (
+                <TextInput
+                  onChangeText={input.onChange}
+                  value={input.value}
+                  secureTextEntry={true}
+                  style={styles.loginInput}
+                  autoCapitalize="none"
+                  placeholder="Password"
+                  placeholderTextColor="#9C9C9C"
+                />
+              )}
+            </Field>
+            <TouchableOpacity
+              style={styles.loginButton}
+              onPress={() => form.submit()}>
+              <Text style={styles.loginButtonText}>SING UP</Text>
+            </TouchableOpacity>
+          </>
+        )}
       />
-      <TextInput
-        style={styles.loginInput}
-        onChangeText={setName}
-        value={name}
-        placeholder="Name"
-      />
-      <TextInput
-        onChangeText={setPassword}
-        value={password}
-        secureTextEntry={true}
-        style={styles.loginInput}
-        placeholder="Password"
-      />
-      <TouchableOpacity style={styles.loginButton} onPress={onSignUp}>
-        <Text style={styles.loginButtonText}>SING UP</Text>
-      </TouchableOpacity>
+
       <View style={styles.singIn}>
         <TouchableOpacity onPress={() => navigation.navigate('SignIn')}>
           <Text style={styles.singInText}>Sing In</Text>
