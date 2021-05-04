@@ -1,6 +1,5 @@
 import React, {useState} from 'react';
 import {
-  Image,
   StyleSheet,
   Text,
   TextInput,
@@ -18,6 +17,7 @@ import {StackScreenProps} from '@react-navigation/stack';
 import {RootStackParamList} from '@lib/types';
 import {Form, Field} from 'react-final-form';
 import {Loader} from '@components/Loader';
+import {PlusSmallIcon} from '@assets/images/svg/PlusSmallIcon';
 
 type NavigationProps = StackScreenProps<RootStackParamList, 'Desk'>;
 
@@ -45,7 +45,7 @@ const Desk: React.FC<NavigationProps> = ({navigation}) => {
             <TouchableOpacity
               style={styles.headerPlus}
               onPress={() => setIsVisibleInput(!isVisibleInput)}>
-              <Image source={require('@assets/images/plus.png')} />
+              <PlusSmallIcon />
             </TouchableOpacity>
           </>
         ) : (
