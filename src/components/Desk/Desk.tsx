@@ -33,6 +33,12 @@ const Desk: React.FC<NavigationProps> = ({navigation}) => {
     });
   };
 
+  const onCreate = (title: string) => {
+    if (title.trim()) {
+      dispatch(createColumn({title: title, description: ''}));
+    }
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar backgroundColor={'white'} barStyle={'dark-content'} />
@@ -51,12 +57,7 @@ const Desk: React.FC<NavigationProps> = ({navigation}) => {
           </>
         ) : (
           <Form
-            onSubmit={value => {
-              const {title} = value;
-              if (title.trim()) {
-                dispatch(createColumn({title: title, description: ''}));
-              }
-            }}
+            onSubmit={value => onCreate(value.title)}
             initialValues={{title: ''}}
             render={({form}) => (
               <Field name="title">

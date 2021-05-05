@@ -22,14 +22,15 @@ const ColumnPreview: React.FC<ColumnPreviewProps> = ({onPress, column}) => {
 
   const renderRightActions = () => {
     return (
-      <TouchableOpacity
-        onPress={() => {
-          dispatch(deleteColumn(column.id));
-          Vibration.vibrate([0, 50]);
-        }}>
+      <TouchableOpacity onPress={() => onDelete(column.id)}>
         <Text style={[styles.column, styles.delete]}>Delete</Text>
       </TouchableOpacity>
     );
+  };
+
+  const onDelete = (id: number) => {
+    dispatch(deleteColumn(id));
+    Vibration.vibrate([0, 50]);
   };
 
   const onUpdateColumn = (title: string) => {

@@ -25,6 +25,12 @@ type NavigationProps = StackScreenProps<RootStackParamList, 'SignIn'>;
 const SignIn = ({navigation}: NavigationProps) => {
   const dispatch = useAppDispatch();
 
+  const onSignIn = (email: string, password: string) => {
+    if (password.trim() && email.trim()) {
+      dispatch(authSingIn({email, password}));
+    }
+  };
+
   return (
     <SafeAreaView style={styles.body}>
       <View style={styles.container}>
@@ -33,12 +39,7 @@ const SignIn = ({navigation}: NavigationProps) => {
         <Loader />
 
         <Form
-          onSubmit={value => {
-            const {email, password} = value;
-            if (password.trim() && email.trim()) {
-              dispatch(authSingIn({email, password}));
-            }
-          }}
+          onSubmit={value => onSignIn(value.email, value.password)}
           initialValues={{email: '', password: ''}}
           render={({form}) => (
             <>
