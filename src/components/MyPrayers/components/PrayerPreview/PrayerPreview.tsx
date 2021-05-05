@@ -14,6 +14,10 @@ import {
   Swipeable,
   TextInput,
 } from 'react-native-gesture-handler';
+import {UserIcon} from '@assets/images/svg/UserIcon';
+import {HandsIcon} from '@assets/images/svg/HandsIcon';
+import BouncyCheckbox from 'react-native-bouncy-checkbox';
+import {VectorIcon} from '@assets/images/svg/VectorIcon';
 
 const PrayerPreview: React.FC<{prayer: PrayerData}> = ({prayer}) => {
   const [isVisibleInput, setIsVisibleInput] = useState(false);
@@ -25,7 +29,9 @@ const PrayerPreview: React.FC<{prayer: PrayerData}> = ({prayer}) => {
           //   dispatch(deleteColumn(column.id));
           Vibration.vibrate([0, 50]);
         }}>
-        <Text style={[styles.delete]}>Delete</Text>
+        <View style={styles.delete}>
+          <Text style={styles.deleteText}>Delete</Text>
+        </View>
       </TouchableOpacity>
     );
   };
@@ -75,10 +81,63 @@ const PrayerPreview: React.FC<{prayer: PrayerData}> = ({prayer}) => {
               }
             }}
             minDurationMs={500}>
-            <View style={styles.prayer}>
-              <Text onPress={() => {}} style={styles.prayerText}>
-                {prayer.title}
-              </Text>
+            <View style={styles.wrap}>
+              <View style={styles.prayer}>
+                <View style={styles.prayerItemsWrap}>
+                  <View style={styles.prayerLine} />
+
+                  <Form
+                    onSubmit={value => {
+                      const {checked} = value;
+                      console.log(checked);
+                    }}
+                    initialValues={{checked: prayer.checked}}
+                    render={({form}) => (
+                      <Field name="checked">
+                        {({input}) => (
+                          <BouncyCheckbox
+                            size={22}
+                            fillColor="#FFF"
+                            unfillColor="#FFF"
+                            isChecked={input.value}
+                            iconStyle={styles.prayerCheckbox}
+                            onPress={input.onChange}
+                            ImageComponent={() => <VectorIcon />}
+                            disableText
+                          />
+                        )}
+                      </Field>
+                    )}
+                  />
+
+                  {!prayer.checked ? (
+                    <Text
+                      onPress={() => {}}
+                      numberOfLines={1}
+                      style={styles.prayerText}>
+                      {prayer.title}
+                    </Text>
+                  ) : (
+                    <Text
+                      onPress={() => {}}
+                      numberOfLines={1}
+                      style={[styles.prayerText, styles.prayerTextLine]}>
+                      {prayer.title}
+                    </Text>
+                  )}
+                </View>
+
+                <View style={styles.prayerIconsWrap}>
+                  <View style={styles.prayerIcon}>
+                    <UserIcon />
+                    <Text style={styles.prayerIconText}>3</Text>
+                  </View>
+                  <View style={styles.prayerIcon}>
+                    <HandsIcon />
+                    <Text style={styles.prayerIconText}>123</Text>
+                  </View>
+                </View>
+              </View>
             </View>
           </LongPressGestureHandler>
         </Swipeable>
@@ -88,29 +147,78 @@ const PrayerPreview: React.FC<{prayer: PrayerData}> = ({prayer}) => {
 };
 
 const styles = StyleSheet.create({
-  prayer: {
-    paddingVertical: 24,
-    borderBottomWidth: 1,
-    borderBottomColor: '#E5E5E5',
+  wrap: {
+    width: '100%',
     backgroundColor: 'white',
   },
+  prayer: {
+    flex: 1,
+    paddingVertical: 24,
+    borderBottomWidth: 1,
+    marginHorizontal: 15,
+    borderBottomColor: '#E5E5E5',
+    backgroundColor: 'white',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  prayerItemsWrap: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  prayerIconsWrap: {
+    flexDirection: 'row',
+  },
   prayerText: {
+    width: '70%',
     fontSize: 17,
-    fontFamily: 'SFUIText-Light',
+    fontFamily: 'SFUIText-Regular',
+    marginLeft: 15,
+  },
+  prayerTextLine: {
+    textDecorationLine: 'line-through',
+    textDecorationStyle: 'solid',
+  },
+  prayerCheckbox: {
+    borderColor: '#514D47',
+    borderRadius: 4,
+    marginLeft: 15,
   },
   prayerInput: {
     fontSize: 17,
-    fontFamily: 'SFUIText-Light',
+    fontFamily: 'SFUIText-Regular',
+    paddingVertical: 24,
+    borderBottomWidth: 1,
+    borderBottomColor: '#72A8BC',
   },
   delete: {
     height: '100%',
     paddingHorizontal: 20,
-    alignSelf: 'center',
-    paddingVertical: 26,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: 'rgb(172, 82, 83)',
+  },
+  deleteText: {
     color: 'white',
     fontSize: 13,
-    backgroundColor: 'rgb(172, 82, 83)',
-    fontFamily: 'SFUIText-Light',
+    fontFamily: 'SFUIText-Regular',
+  },
+  prayerLine: {
+    height: 22,
+    width: 3,
+    borderRadius: 5,
+    backgroundColor: '#AC5253',
+  },
+  prayerIcon: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginLeft: 15,
+  },
+  prayerIconText: {
+    fontSize: 12,
+    fontFamily: 'SFUIText-Regular',
+    marginLeft: 5,
   },
 });
 

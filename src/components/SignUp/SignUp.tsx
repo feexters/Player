@@ -13,6 +13,7 @@ import {
 } from 'react-native';
 import {authSingUp} from '@store/sagas';
 import {Loader} from '@components/Loader';
+import {Button} from '@components/ui';
 
 type RootStackParamList = {
   SignIn: undefined;
@@ -80,11 +81,7 @@ const SignUp = ({navigation}: NavigationProps) => {
                   />
                 )}
               </Field>
-              <TouchableOpacity
-                style={styles.loginButton}
-                onPress={() => form.submit()}>
-                <Text style={styles.loginButtonText}>SING UP</Text>
-              </TouchableOpacity>
+              <Button onPress={() => form.submit()}>SING UP</Button>
             </>
           )}
         />
@@ -118,18 +115,6 @@ const styles = StyleSheet.create({
     padding: 15,
     marginBottom: 10,
     fontSize: 17,
-  },
-  loginButton: {
-    backgroundColor: 'rgb(191, 179, 147)',
-    borderRadius: 15,
-    paddingHorizontal: 15,
-    paddingVertical: 5,
-    marginTop: 10,
-  },
-  loginButtonText: {
-    fontSize: 17,
-    color: 'rgb(255, 255, 255)',
-    fontFamily: 'SFUIText-Bold',
   },
   singIn: {
     marginTop: 15,

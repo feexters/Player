@@ -13,6 +13,7 @@ import {
 import {authSingIn} from '@store/sagas';
 import {Form, Field} from 'react-final-form';
 import {Loader} from '@components/Loader';
+import {Button} from '@components/ui';
 
 type RootStackParamList = {
   SignIn: undefined;
@@ -68,11 +69,7 @@ const SignIn = ({navigation}: NavigationProps) => {
                   />
                 )}
               </Field>
-              <TouchableOpacity
-                style={styles.loginButton}
-                onPress={() => form.submit()}>
-                <Text style={styles.loginButtonText}>SIGN IN</Text>
-              </TouchableOpacity>
+              <Button onPress={() => form.submit()}>SING IN</Button>
             </>
           )}
         />

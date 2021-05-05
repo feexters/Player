@@ -1,12 +1,15 @@
 import {PlusIcon} from '@assets/images/svg/PlusIcon';
-import React from 'react';
+import React, {useState} from 'react';
 import {StyleSheet, TouchableOpacity, View} from 'react-native';
 import {FlatList, TextInput} from 'react-native-gesture-handler';
 import {Form, Field} from 'react-final-form';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {PrayerPreview} from './components/PrayerPreview';
+import {Button} from '@components/ui';
 
 const MyPrayers = () => {
+  const [isHide, setIsHide] = useState(false);
+
   const prayers = {
     list: [
       {
@@ -24,7 +27,7 @@ const MyPrayers = () => {
       {
         id: 3,
         description: '2131',
-        title: 'Some Prayer 3',
+        title: 'Some Prayer 3 hjbibbhliubulib',
         checked: false,
       },
       {
@@ -77,7 +80,7 @@ const MyPrayers = () => {
 
         <View style={styles.prayerList}>
           <FlatList
-            data={prayers.list}
+            data={prayers.list.filter(item => !item.checked)}
             removeClippedSubviews={false}
             renderItem={({item}) => (
               <PrayerPreview
@@ -87,6 +90,38 @@ const MyPrayers = () => {
               />
             )}
           />
+        </View>
+
+        <View style={styles.answered}>
+          {isHide ? (
+            <View style={styles.answeredButton}>
+              <Button onPress={() => setIsHide(!isHide)}>
+                SHOW ANSWERED PRAYERS
+              </Button>
+            </View>
+          ) : (
+            <>
+              <View style={styles.answeredButton}>
+                <Button onPress={() => setIsHide(!isHide)}>
+                  HIDE ANSWERED PRAYERS
+                </Button>
+              </View>
+              <View style={styles.answeredLine} />
+              <View style={styles.prayerList}>
+                <FlatList
+                  data={prayers.list.filter(item => item.checked)}
+                  removeClippedSubviews={false}
+                  renderItem={({item}) => (
+                    <PrayerPreview
+                      key={item.id}
+                      prayer={item}
+                      // onPress={() => onPress(item)}
+                    />
+                  )}
+                />
+              </View>
+            </>
+          )}
         </View>
       </View>
     </SafeAreaView>
@@ -100,12 +135,11 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: 'white',
-    padding: 15,
   },
   prayerInput: {
     flex: 1,
     fontSize: 17,
-    fontFamily: 'SFUIText-Medium',
+    fontFamily: 'SFUIText-Regular',
   },
   prayerForm: {
     flexDirection: 'row',
@@ -113,12 +147,26 @@ const styles = StyleSheet.create({
     borderColor: 'rgb(229, 229, 229)',
     borderWidth: 1,
     borderRadius: 10,
+    marginHorizontal: 15,
+    marginVertical: 16,
   },
   inputButton: {
     paddingHorizontal: 14,
   },
   prayerList: {
-    marginTop: 16,
+    width: '100%',
+  },
+  answered: {
+    flex: 1,
+    width: '100%',
+  },
+  answeredButton: {
+    paddingVertical: 21,
+  },
+  answeredLine: {
+    borderTopWidth: 1,
+    borderTopColor: '#E5E5E5',
+    marginHorizontal: 15,
   },
 });
 
