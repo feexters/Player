@@ -36,7 +36,6 @@ const PrayerPreview: React.FC<{prayer: PrayerData}> = ({prayer}) => {
   };
 
   const onChecked = (checked: boolean) => {
-    console.log(checked);
     dispatch(
       updatePrayer({
         id: prayer.id,

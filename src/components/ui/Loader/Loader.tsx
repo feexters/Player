@@ -1,20 +1,14 @@
-import {useAppSelector} from '@lib/hooks';
 import React from 'react';
 import {ActivityIndicator, StyleSheet} from 'react-native';
 
 const Loader = () => {
-  const {loading} = useAppSelector(state => state.loader);
   return (
-    <>
-      {loading && (
-        <ActivityIndicator
-          style={styles.loader}
-          size="large"
-          color="#72A8BC"
-          animating={loading}
-        />
-      )}
-    </>
+    <ActivityIndicator
+      style={styles.loader}
+      size="large"
+      color="#72A8BC"
+      animating={true}
+    />
   );
 };
 

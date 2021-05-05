@@ -16,7 +16,7 @@ import {ColumnData} from '@lib/interfaces';
 import {StackScreenProps} from '@react-navigation/stack';
 import {RootStackParamList} from '@lib/types';
 import {Form, Field} from 'react-final-form';
-import {Loader} from '@components/Loader';
+import {Loader} from '@components/ui/Loader';
 import {PlusSmallIcon} from '@assets/images/svg/PlusSmallIcon';
 
 type NavigationProps = StackScreenProps<RootStackParamList, 'Desk'>;
@@ -25,6 +25,7 @@ const Desk: React.FC<NavigationProps> = ({navigation}) => {
   const [isVisibleInput, setIsVisibleInput] = useState(false);
   const dispatch = useAppDispatch();
   const {columns} = useAppSelector(state => state);
+  const {isLoading} = useAppSelector(state => state.loader);
 
   const onPress = (column: ColumnData) => {
     dispatch(getAllPrayers());
@@ -43,7 +44,7 @@ const Desk: React.FC<NavigationProps> = ({navigation}) => {
     <SafeAreaView style={styles.container}>
       <StatusBar backgroundColor={'white'} barStyle={'dark-content'} />
 
-      <Loader />
+      {isLoading && <Loader />}
 
       <View style={styles.header}>
         {!isVisibleInput ? (

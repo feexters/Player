@@ -1,5 +1,5 @@
 import {StackScreenProps} from '@react-navigation/stack';
-import {useAppDispatch} from '@lib/hooks';
+import {useAppDispatch, useAppSelector} from '@lib/hooks';
 import React from 'react';
 import {Form, Field} from 'react-final-form';
 import {
@@ -12,7 +12,7 @@ import {
   StatusBar,
 } from 'react-native';
 import {authSingUp} from '@store/sagas';
-import {Loader} from '@components/Loader';
+import {Loader} from '@components/ui/Loader';
 import {Button} from '@components/ui';
 
 type RootStackParamList = {
@@ -24,6 +24,7 @@ type NavigationProps = StackScreenProps<RootStackParamList, 'SignUp'>;
 
 const SignUp = ({navigation}: NavigationProps) => {
   const dispatch = useAppDispatch();
+  const {isLoading} = useAppSelector(state => state.loader);
 
   const onSignUp = (email: string, password: string, name: string) => {
     if (password.trim() && name.trim() && email.trim()) {
@@ -35,7 +36,7 @@ const SignUp = ({navigation}: NavigationProps) => {
     <SafeAreaView style={styles.body}>
       <View style={styles.container}>
         <StatusBar backgroundColor={'white'} barStyle={'dark-content'} />
-        <Loader />
+        {isLoading && <Loader />}
 
         <Form
           onSubmit={value => onSignUp(value.email, value.password, value.name)}

@@ -1,5 +1,5 @@
 import {StackScreenProps} from '@react-navigation/stack';
-import {useAppDispatch} from '@lib/hooks';
+import {useAppDispatch, useAppSelector} from '@lib/hooks';
 import React from 'react';
 import {
   SafeAreaView,
@@ -12,7 +12,7 @@ import {
 } from 'react-native';
 import {authSingIn} from '@store/sagas';
 import {Form, Field} from 'react-final-form';
-import {Loader} from '@components/Loader';
+import {Loader} from '@components/ui/Loader';
 import {Button} from '@components/ui';
 
 type RootStackParamList = {
@@ -24,6 +24,7 @@ type NavigationProps = StackScreenProps<RootStackParamList, 'SignIn'>;
 
 const SignIn = ({navigation}: NavigationProps) => {
   const dispatch = useAppDispatch();
+  const {isLoading} = useAppSelector(state => state.loader);
 
   const onSignIn = (email: string, password: string) => {
     if (password.trim() && email.trim()) {
@@ -36,7 +37,7 @@ const SignIn = ({navigation}: NavigationProps) => {
       <View style={styles.container}>
         <StatusBar backgroundColor={'white'} barStyle={'dark-content'} />
 
-        <Loader />
+        {isLoading && <Loader />}
 
         <Form
           onSubmit={value => onSignIn(value.email, value.password)}

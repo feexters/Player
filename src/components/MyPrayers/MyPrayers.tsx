@@ -5,7 +5,7 @@ import {FlatList, TextInput} from 'react-native-gesture-handler';
 import {Form, Field} from 'react-final-form';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {PrayerPreview} from './components/PrayerPreview';
-import {Button} from '@components/ui';
+import {Button, Loader} from '@components/ui';
 import {useAppDispatch, useAppSelector} from '@lib/hooks';
 import {createPrayer} from '@store/sagas';
 import {ColumnData} from '@lib/interfaces';
@@ -14,10 +14,10 @@ const MyPrayers: React.FC<{column: ColumnData}> = ({column}) => {
   const [isHide, setIsHide] = useState(false);
   const dispatch = useAppDispatch();
   const prayers = useAppSelector(state => state.prayers);
+  const {isLoading} = useAppSelector(state => state.loader);
 
   const onCreatePrayer = (title: string) => {
     if (title.trim()) {
-      console.log(title);
       dispatch(
         createPrayer({
           title: title,
@@ -31,6 +31,7 @@ const MyPrayers: React.FC<{column: ColumnData}> = ({column}) => {
 
   return (
     <SafeAreaView style={styles.body}>
+      {isLoading && <Loader />}
       <View style={styles.container}>
         <Form
           onSubmit={value => onCreatePrayer(value.title)}
