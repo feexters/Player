@@ -6,6 +6,8 @@ import {SubscribedPrayers} from '@components/SubscribedPrayers';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 import {StyleSheet, Text, View} from 'react-native';
 import {SettingsIcon} from '@assets/images/svg/SettingsIcon';
+import {useAppSelector} from '@lib/hooks';
+import {Loader} from '@components/ui';
 
 type NavigationProps = StackScreenProps<RootStackParamList, 'Column'>;
 
@@ -13,6 +15,7 @@ const Tab = createMaterialTopTabNavigator();
 
 const Column: React.FC<NavigationProps> = ({route, navigation}) => {
   const {column} = route.params;
+  const {isLoading} = useAppSelector(state => state.loader);
 
   React.useLayoutEffect(() => {
     navigation.setOptions({
@@ -24,37 +27,44 @@ const Column: React.FC<NavigationProps> = ({route, navigation}) => {
   }, [navigation, column.title]);
 
   return (
-    <Tab.Navigator
-      tabBarOptions={{
-        activeTintColor: 'rgb(114, 168, 188)',
-        inactiveTintColor: 'rgb(200, 200, 200)',
-        indicatorStyle: {
-          backgroundColor: 'rgb(114, 168, 188)',
-        },
-        labelStyle: styles.label,
-        style: styles.header,
-        showIcon: true,
-      }}>
-      <Tab.Screen name="MyPrayers" options={{title: 'My Prayers'}}>
-        {() => <MyPrayers column={column} />}
-      </Tab.Screen>
-      <Tab.Screen
-        name="SubscribedPrayers"
-        component={SubscribedPrayers}
-        options={{
-          tabBarLabel: ({color}) => {
-            return (
-              <View style={styles.label}>
-                <Text style={{color: color}}>SUBSCRIBED</Text>
-                <View style={styles.notifications}>
-                  <Text style={styles.counter}>11</Text>
-                </View>
-              </View>
-            );
+    <>
+      <Tab.Navigator
+        tabBarOptions={{
+          activeTintColor: 'rgb(114, 168, 188)',
+          inactiveTintColor: 'rgb(200, 200, 200)',
+          indicatorStyle: {
+            backgroundColor: 'rgb(114, 168, 188)',
           },
-        }}
-      />
-    </Tab.Navigator>
+          labelStyle: styles.label,
+          style: styles.header,
+          showIcon: true,
+        }}>
+        <Tab.Screen name="MyPrayers" options={{title: 'My Prayers'}}>
+          {() => (
+            <>
+              {isLoading && <Loader />}
+              <MyPrayers column={column} />
+            </>
+          )}
+        </Tab.Screen>
+        <Tab.Screen
+          name="SubscribedPrayers"
+          component={SubscribedPrayers}
+          options={{
+            tabBarLabel: ({color}) => {
+              return (
+                <View style={styles.label}>
+                  <Text style={{color: color}}>SUBSCRIBED</Text>
+                  <View style={styles.notifications}>
+                    <Text style={styles.counter}>11</Text>
+                  </View>
+                </View>
+              );
+            },
+          }}
+        />
+      </Tab.Navigator>
+    </>
   );
 };
 
