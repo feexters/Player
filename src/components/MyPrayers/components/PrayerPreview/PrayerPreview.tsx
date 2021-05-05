@@ -1,33 +1,31 @@
-import {useAppDispatch} from '@lib/hooks';
-import {ColumnData} from '@lib/interfaces';
+import {PrayerData} from '@lib/interfaces';
 import React, {useState} from 'react';
-import {StyleSheet, Text, TouchableOpacity, Vibration} from 'react-native';
+import {
+  Text,
+  StyleSheet,
+  Vibration,
+  View,
+  TouchableOpacity,
+} from 'react-native';
+import {Form, Field} from 'react-final-form';
 import {
   LongPressGestureHandler,
   State,
   Swipeable,
   TextInput,
 } from 'react-native-gesture-handler';
-import {deleteColumn, updateColumn} from '@store/sagas';
-import {Form, Field} from 'react-final-form';
 
-interface ColumnPreviewProps {
-  onPress(): void;
-  column: ColumnData;
-}
-
-const ColumnPreview: React.FC<ColumnPreviewProps> = ({onPress, column}) => {
+const PrayerPreview: React.FC<{prayer: PrayerData}> = ({prayer}) => {
   const [isVisibleInput, setIsVisibleInput] = useState(false);
-  const dispatch = useAppDispatch();
 
   const renderRightActions = () => {
     return (
       <TouchableOpacity
         onPress={() => {
-          dispatch(deleteColumn(column.id));
+          //   dispatch(deleteColumn(column.id));
           Vibration.vibrate([0, 50]);
         }}>
-        <Text style={[styles.column, styles.delete]}>Delete</Text>
+        <Text style={[styles.delete]}>Delete</Text>
       </TouchableOpacity>
     );
   };
@@ -39,21 +37,21 @@ const ColumnPreview: React.FC<ColumnPreviewProps> = ({onPress, column}) => {
           onSubmit={value => {
             const {title} = value;
             if (title.trim()) {
-              dispatch(
-                updateColumn({
-                  id: column.id,
-                  title: title,
-                  description: column.description,
-                }),
-              );
+              //   dispatch(
+              //     updateColumn({
+              //       id: column.id,
+              //       title: title,
+              //       description: column.description,
+              //     }),
+              //   );
             }
           }}
-          initialValues={{title: column.title}}
+          initialValues={{title: prayer.title}}
           render={({form}) => (
             <Field name="title">
               {({input}) => (
                 <TextInput
-                  style={[styles.column, styles.columnInput]}
+                  style={styles.prayerInput}
                   placeholder="Column title..."
                   onSubmitEditing={() => form.submit()}
                   onBlur={() => setIsVisibleInput(!isVisibleInput)}
@@ -77,9 +75,11 @@ const ColumnPreview: React.FC<ColumnPreviewProps> = ({onPress, column}) => {
               }
             }}
             minDurationMs={500}>
-            <Text onPress={() => onPress()} style={styles.column}>
-              {column.title}
-            </Text>
+            <View style={styles.prayer}>
+              <Text onPress={() => {}} style={styles.prayerText}>
+                {prayer.title}
+              </Text>
+            </View>
           </LongPressGestureHandler>
         </Swipeable>
       )}
@@ -88,28 +88,30 @@ const ColumnPreview: React.FC<ColumnPreviewProps> = ({onPress, column}) => {
 };
 
 const styles = StyleSheet.create({
-  column: {
-    paddingHorizontal: 15,
-    paddingVertical: 20,
-    flexDirection: 'row',
-    borderColor: 'rgb(229, 229, 229)',
-    borderWidth: 1,
-    borderRadius: 4,
-    marginTop: 10,
-    fontSize: 17,
+  prayer: {
+    paddingVertical: 24,
+    borderBottomWidth: 1,
+    borderBottomColor: '#E5E5E5',
     backgroundColor: 'white',
-    fontFamily: 'SFUIText-Medium',
   },
-  columnInput: {
-    borderColor: 'rgb(114, 168, 188)',
-    borderWidth: 1,
+  prayerText: {
+    fontSize: 17,
+    fontFamily: 'SFUIText-Light',
+  },
+  prayerInput: {
+    fontSize: 17,
+    fontFamily: 'SFUIText-Light',
   },
   delete: {
+    height: '100%',
+    paddingHorizontal: 20,
+    alignSelf: 'center',
+    paddingVertical: 26,
     color: 'white',
-    fontSize: 17,
+    fontSize: 13,
     backgroundColor: 'rgb(172, 82, 83)',
-    fontFamily: 'SFUIText-Medium',
+    fontFamily: 'SFUIText-Light',
   },
 });
 
-export default ColumnPreview;
+export default PrayerPreview;

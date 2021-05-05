@@ -49,6 +49,7 @@ const SignUp = ({navigation}: NavigationProps) => {
                     autoCapitalize="none"
                     placeholder="Email"
                     placeholderTextColor="#9C9C9C"
+                    selectionColor="#72A8BC"
                   />
                 )}
               </Field>
@@ -61,6 +62,7 @@ const SignUp = ({navigation}: NavigationProps) => {
                     placeholder="Name"
                     autoCapitalize="none"
                     placeholderTextColor="#9C9C9C"
+                    selectionColor="#72A8BC"
                   />
                 )}
               </Field>
@@ -74,6 +76,7 @@ const SignUp = ({navigation}: NavigationProps) => {
                     autoCapitalize="none"
                     placeholder="Password"
                     placeholderTextColor="#9C9C9C"
+                    selectionColor="#72A8BC"
                   />
                 )}
               </Field>

@@ -50,6 +50,7 @@ const SignIn = ({navigation}: NavigationProps) => {
                     placeholder="Email"
                     autoCapitalize="none"
                     placeholderTextColor="#9C9C9C"
+                    selectionColor="#72A8BC"
                   />
                 )}
               </Field>
@@ -63,6 +64,7 @@ const SignIn = ({navigation}: NavigationProps) => {
                     placeholder="Password"
                     autoCapitalize="none"
                     placeholderTextColor="#9C9C9C"
+                    selectionColor="#72A8BC"
                   />
                 )}
               </Field>

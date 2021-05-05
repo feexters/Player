@@ -67,6 +67,7 @@ const Desk: React.FC<NavigationProps> = ({navigation}) => {
                     onSubmitEditing={() => form.submit()}
                     onBlur={() => setIsVisibleInput(!isVisibleInput)}
                     placeholderTextColor="#9C9C9C"
+                    selectionColor="#72A8BC"
                     autoFocus
                   />
                 )}
