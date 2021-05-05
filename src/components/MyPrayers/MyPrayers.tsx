@@ -6,50 +6,34 @@ import {Form, Field} from 'react-final-form';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {PrayerPreview} from './components/PrayerPreview';
 import {Button} from '@components/ui';
+import {useAppDispatch, useAppSelector} from '@lib/hooks';
+import {createPrayer} from '@store/sagas';
+import {ColumnData} from '@lib/interfaces';
 
-const MyPrayers = () => {
+const MyPrayers: React.FC<{column: ColumnData}> = ({column}) => {
   const [isHide, setIsHide] = useState(false);
+  const dispatch = useAppDispatch();
+  const prayers = useAppSelector(state => state.prayers);
 
-  const prayers = {
-    list: [
-      {
-        id: 1,
-        description: '2131',
-        title: 'Some Prayer',
-        checked: false,
-      },
-      {
-        id: 2,
-        description: '2131',
-        title: 'Some Prayer 2',
-        checked: true,
-      },
-      {
-        id: 3,
-        description: '2131',
-        title: 'Some Prayer 3 hjbibbhliubulib',
-        checked: false,
-      },
-      {
-        id: 4,
-        description: '2131',
-        title: 'Some Prayer 4',
-        checked: false,
-      },
-    ],
+  const onCreatePrayer = (title: string) => {
+    if (title.trim()) {
+      console.log(title);
+      dispatch(
+        createPrayer({
+          title: title,
+          checked: false,
+          description: '',
+          columnId: column.id,
+        }),
+      );
+    }
   };
 
   return (
     <SafeAreaView style={styles.body}>
       <View style={styles.container}>
         <Form
-          onSubmit={value => {
-            const {title} = value;
-            if (title.trim()) {
-              console.log(title);
-              // dispatch(createPrayer({...}));
-            }
-          }}
+          onSubmit={value => onCreatePrayer(value.title)}
           initialValues={{title: ''}}
           render={({form}) => (
             <View style={styles.prayerForm}>

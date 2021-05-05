@@ -35,11 +35,9 @@ const Column: React.FC<NavigationProps> = ({route, navigation}) => {
         style: styles.header,
         showIcon: true,
       }}>
-      <Tab.Screen
-        name="MyPrayers"
-        component={MyPrayers}
-        options={{title: 'My Prayers'}}
-      />
+      <Tab.Screen name="MyPrayers" options={{title: 'My Prayers'}}>
+        {() => <MyPrayers column={column} />}
+      </Tab.Screen>
       <Tab.Screen
         name="SubscribedPrayers"
         component={SubscribedPrayers}

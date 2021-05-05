@@ -7,3 +7,10 @@ export {
   deleteColumn,
   updateColumn,
 } from './columns';
+export {
+  getPrayerById,
+  getAllPrayers,
+  createPrayer,
+  deletePrayer,
+  updatePrayer,
+} from './prayers';

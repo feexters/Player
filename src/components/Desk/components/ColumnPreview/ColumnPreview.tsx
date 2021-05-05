@@ -32,22 +32,23 @@ const ColumnPreview: React.FC<ColumnPreviewProps> = ({onPress, column}) => {
     );
   };
 
+  const onUpdateColumn = (title: string) => {
+    if (title.trim()) {
+      dispatch(
+        updateColumn({
+          id: column.id,
+          title: title,
+          description: column.description,
+        }),
+      );
+    }
+  };
+
   return (
     <>
       {isVisibleInput ? (
         <Form
-          onSubmit={value => {
-            const {title} = value;
-            if (title.trim()) {
-              dispatch(
-                updateColumn({
-                  id: column.id,
-                  title: title,
-                  description: column.description,
-                }),
-              );
-            }
-          }}
+          onSubmit={value => onUpdateColumn(value.title)}
           initialValues={{title: column.title}}
           render={({form}) => (
             <Field name="title">

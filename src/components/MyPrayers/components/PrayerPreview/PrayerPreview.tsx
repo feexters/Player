@@ -18,17 +18,16 @@ import {UserIcon} from '@assets/images/svg/UserIcon';
 import {HandsIcon} from '@assets/images/svg/HandsIcon';
 import BouncyCheckbox from 'react-native-bouncy-checkbox';
 import {VectorIcon} from '@assets/images/svg/VectorIcon';
+import {deletePrayer, updatePrayer} from '@store/sagas';
+import {useAppDispatch} from '@lib/hooks';
 
 const PrayerPreview: React.FC<{prayer: PrayerData}> = ({prayer}) => {
   const [isVisibleInput, setIsVisibleInput] = useState(false);
+  const dispatch = useAppDispatch();
 
   const renderRightActions = () => {
     return (
-      <TouchableOpacity
-        onPress={() => {
-          //   dispatch(deleteColumn(column.id));
-          Vibration.vibrate([0, 50]);
-        }}>
+      <TouchableOpacity onPress={() => onDelete(prayer.id)}>
         <View style={styles.delete}>
           <Text style={styles.deleteText}>Delete</Text>
         </View>
@@ -36,22 +35,41 @@ const PrayerPreview: React.FC<{prayer: PrayerData}> = ({prayer}) => {
     );
   };
 
+  const onChecked = (checked: boolean) => {
+    console.log(checked);
+    dispatch(
+      updatePrayer({
+        id: prayer.id,
+        title: prayer.title,
+        description: prayer.description,
+        checked: checked,
+      }),
+    );
+  };
+
+  const onChangeTitle = (title: string) => {
+    if (title.trim()) {
+      dispatch(
+        updatePrayer({
+          id: prayer.id,
+          title: title,
+          description: prayer.description,
+          checked: prayer.checked,
+        }),
+      );
+    }
+  };
+
+  const onDelete = (id: number) => {
+    dispatch(deletePrayer(id));
+    Vibration.vibrate([0, 50]);
+  };
+
   return (
     <>
       {isVisibleInput ? (
         <Form
-          onSubmit={value => {
-            const {title} = value;
-            if (title.trim()) {
-              //   dispatch(
-              //     updateColumn({
-              //       id: column.id,
-              //       title: title,
-              //       description: column.description,
-              //     }),
-              //   );
-            }
-          }}
+          onSubmit={value => onChangeTitle(value.title)}
           initialValues={{title: prayer.title}}
           render={({form}) => (
             <Field name="title">
@@ -87,10 +105,7 @@ const PrayerPreview: React.FC<{prayer: PrayerData}> = ({prayer}) => {
                   <View style={styles.prayerLine} />
 
                   <Form
-                    onSubmit={value => {
-                      const {checked} = value;
-                      console.log(checked);
-                    }}
+                    onSubmit={value => onChecked(value.checked)}
                     initialValues={{checked: prayer.checked}}
                     render={({form}) => (
                       <Field name="checked">
@@ -101,7 +116,10 @@ const PrayerPreview: React.FC<{prayer: PrayerData}> = ({prayer}) => {
                             unfillColor="#FFF"
                             isChecked={input.value}
                             iconStyle={styles.prayerCheckbox}
-                            onPress={input.onChange}
+                            onPress={value => {
+                              input.onChange(value);
+                              form.submit();
+                            }}
                             ImageComponent={() => <VectorIcon />}
                             disableText
                           />

@@ -11,7 +11,7 @@ import {
 } from 'react-native';
 import {useAppDispatch, useAppSelector} from '@lib/hooks';
 import {ColumnPreview} from './components/ColumnPreview';
-import {createColumn} from '@store/sagas';
+import {createColumn, getAllPrayers} from '@store/sagas';
 import {ColumnData} from '@lib/interfaces';
 import {StackScreenProps} from '@react-navigation/stack';
 import {RootStackParamList} from '@lib/types';
@@ -27,6 +27,7 @@ const Desk: React.FC<NavigationProps> = ({navigation}) => {
   const {columns} = useAppSelector(state => state);
 
   const onPress = (column: ColumnData) => {
+    dispatch(getAllPrayers());
     navigation.navigate('Column', {
       column,
     });
