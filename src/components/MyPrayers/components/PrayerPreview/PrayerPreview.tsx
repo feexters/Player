@@ -19,11 +19,14 @@ import {HandsIcon} from '@assets/images/svg/HandsIcon';
 import BouncyCheckbox from 'react-native-bouncy-checkbox';
 import {VectorIcon} from '@assets/images/svg/VectorIcon';
 import {deletePrayer, updatePrayer} from '@store/sagas';
-import {useAppDispatch} from '@lib/hooks';
+import {useAppDispatch, useAppSelector} from '@lib/hooks';
+import {Loader} from 'components/ui';
 
 const PrayerPreview: React.FC<{prayer: PrayerData}> = ({prayer}) => {
   const [isVisibleInput, setIsVisibleInput] = useState(false);
   const dispatch = useAppDispatch();
+
+  const {isLoading} = useAppSelector(state => state.loader);
 
   const renderRightActions = () => {
     return (
@@ -66,6 +69,7 @@ const PrayerPreview: React.FC<{prayer: PrayerData}> = ({prayer}) => {
 
   return (
     <>
+      {isLoading && <Loader />}
       {isVisibleInput ? (
         <Form
           onSubmit={value => onChangeTitle(value.title)}
