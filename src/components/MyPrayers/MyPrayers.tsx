@@ -1,10 +1,10 @@
 import {PlusIcon} from '@assets/images/svg/PlusIcon';
-import React, {useState} from 'react';
+import React, {useMemo, useState} from 'react';
 import {StyleSheet, TouchableOpacity, View} from 'react-native';
-import {FlatList, TextInput} from 'react-native-gesture-handler';
+import {FlatList, ScrollView, TextInput} from 'react-native-gesture-handler';
 import {Form, Field} from 'react-final-form';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import {PrayerPreview} from './components/PrayerPreview';
+import {PrayerPreview} from '@components/PrayerPreview';
 import {Button, Loader} from '@components/ui';
 import {useAppDispatch, useAppSelector} from '@lib/hooks';
 import {createPrayer} from '@store/sagas';
@@ -15,6 +15,11 @@ const MyPrayers: React.FC<{column: ColumnData}> = ({column}) => {
   const dispatch = useAppDispatch();
   const prayers = useAppSelector(state => state.prayers);
   const {isLoading} = useAppSelector(state => state.loader);
+
+  const columnPrayers = useMemo(
+    () => prayers.list.filter(item => column.id === item.columnId),
+    [prayers.list, column.id],
+  );
 
   const onCreatePrayer = (title: string) => {
     if (title.trim()) {
@@ -34,7 +39,9 @@ const MyPrayers: React.FC<{column: ColumnData}> = ({column}) => {
       {isLoading && <Loader />}
       <View style={styles.container}>
         <Form
-          onSubmit={value => onCreatePrayer(value.title)}
+          onSubmit={value => {
+            onCreatePrayer(value.title);
+          }}
           initialValues={{title: ''}}
           render={({form}) => (
             <View style={styles.prayerForm}>
@@ -42,7 +49,7 @@ const MyPrayers: React.FC<{column: ColumnData}> = ({column}) => {
                 style={styles.inputButton}
                 onPress={() => {
                   form.submit();
-                  form.change('title', '');
+                  form.reset();
                 }}>
                 <PlusIcon />
               </TouchableOpacity>
@@ -53,7 +60,11 @@ const MyPrayers: React.FC<{column: ColumnData}> = ({column}) => {
                     style={styles.prayerInput}
                     placeholder="Add a prayer..."
                     onChangeText={input.onChange}
-                    onSubmitEditing={() => form.submit()}
+                    onSubmitEditing={() => {
+                      form.submit();
+                      form.reset();
+                    }}
+                    value={input.value}
                     placeholderTextColor="#9C9C9C"
                     selectionColor="#72A8BC"
                   />
@@ -65,7 +76,7 @@ const MyPrayers: React.FC<{column: ColumnData}> = ({column}) => {
 
         <View style={styles.prayerList}>
           <FlatList
-            data={prayers.list.filter(item => !item.checked)}
+            data={columnPrayers.filter(item => !item.checked)}
             removeClippedSubviews={false}
             renderItem={({item}) => (
               <PrayerPreview
@@ -94,7 +105,7 @@ const MyPrayers: React.FC<{column: ColumnData}> = ({column}) => {
               <View style={styles.answeredLine} />
               <View style={styles.prayerList}>
                 <FlatList
-                  data={prayers.list.filter(item => item.checked)}
+                  data={columnPrayers.filter(item => item.checked)}
                   removeClippedSubviews={false}
                   renderItem={({item}) => (
                     <PrayerPreview

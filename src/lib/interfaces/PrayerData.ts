@@ -3,4 +3,6 @@ export interface PrayerData {
   title: string;
   description: string;
   checked: boolean;
+  columnId: number;
+  commentsIds: number[];
 }
