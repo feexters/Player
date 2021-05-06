@@ -11,7 +11,12 @@ export const auth = createSlice({
       state.authorized = status;
       state.token = token;
     },
+    logout(state) {
+      Auth.clearToken();
+      state.token = '';
+      state.authorized = false;
+    },
   },
 });
 
-export const {authorized} = auth.actions;
+export const {authorized, logout} = auth.actions;

@@ -1,13 +1,15 @@
 import {StackScreenProps} from '@react-navigation/stack';
 import {RootStackParamList} from '@lib/types';
-import React from 'react';
+import React, {useState} from 'react';
 import {MyPrayers} from '@components/MyPrayers';
 import {SubscribedPrayers} from '@components/SubscribedPrayers';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
-import {StyleSheet, Text, View} from 'react-native';
+import {Pressable, StyleSheet, Text, View} from 'react-native';
 import {SettingsIcon} from '@assets/images/svg/SettingsIcon';
-import {useAppSelector} from '@lib/hooks';
+import {useAppDispatch, useAppSelector} from '@lib/hooks';
 import {Loader} from '@components/ui';
+import {LogoutModal} from '@components/LogoutModal';
+import {logout} from '@store';
 
 type NavigationProps = StackScreenProps<RootStackParamList, 'Column'>;
 
@@ -16,18 +18,33 @@ const Tab = createMaterialTopTabNavigator();
 const Column: React.FC<NavigationProps> = ({route, navigation}) => {
   const {column} = route.params;
   const {isLoading} = useAppSelector(state => state.loader);
+  const [isVisibleModal, setIsVisibleModal] = useState(false);
+  const dispatch = useAppDispatch();
+
+  const onLogout = () => {
+    dispatch(logout());
+  };
 
   React.useLayoutEffect(() => {
     navigation.setOptions({
       title: column.title,
       headerLeft: () => <View />,
-      headerRight: () => <SettingsIcon />,
+      headerRight: () => (
+        <Pressable onPress={() => setIsVisibleModal(true)}>
+          <SettingsIcon />
+        </Pressable>
+      ),
       headerRightContainerStyle: {marginRight: 15},
     });
   }, [navigation, column.title]);
 
   return (
     <>
+      <LogoutModal
+        onCloseModal={() => setIsVisibleModal(false)}
+        onLogout={onLogout}
+        isVisible={isVisibleModal}
+      />
       <Tab.Navigator
         tabBarOptions={{
           activeTintColor: 'rgb(114, 168, 188)',

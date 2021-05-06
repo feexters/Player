@@ -18,6 +18,9 @@ import {RootStackParamList} from '@lib/types';
 import {Form, Field} from 'react-final-form';
 import {Loader} from '@components/ui/Loader';
 import {PlusSmallIcon} from '@assets/images/svg/PlusSmallIcon';
+import {SettingsIcon} from '@assets/images/svg/SettingsIcon';
+import {LogoutModal} from '@components/LogoutModal';
+import {logout} from '@store/slices';
 
 type NavigationProps = StackScreenProps<RootStackParamList, 'Desk'>;
 
@@ -26,12 +29,17 @@ const Desk: React.FC<NavigationProps> = ({navigation}) => {
   const dispatch = useAppDispatch();
   const {columns} = useAppSelector(state => state);
   const {isLoading} = useAppSelector(state => state.loader);
+  const [isVisibleModal, setIsVisibleModal] = useState(false);
 
   const onPress = (column: ColumnData) => {
     dispatch(getAllPrayers());
     navigation.navigate('Column', {
       column,
     });
+  };
+
+  const onLogout = () => {
+    dispatch(logout());
   };
 
   const onCreate = (title: string) => {
@@ -46,12 +54,21 @@ const Desk: React.FC<NavigationProps> = ({navigation}) => {
 
       {isLoading && <Loader />}
 
+      <LogoutModal
+        onCloseModal={() => setIsVisibleModal(false)}
+        isVisible={isVisibleModal}
+        onLogout={onLogout}
+      />
+
       <View style={styles.header}>
         {!isVisibleInput ? (
           <>
+            <TouchableOpacity
+              onPress={() => setIsVisibleModal(!isVisibleModal)}>
+              <SettingsIcon />
+            </TouchableOpacity>
             <Text style={styles.headerText}>My Desk</Text>
             <TouchableOpacity
-              style={styles.headerPlus}
               onPress={() => setIsVisibleInput(!isVisibleInput)}>
               <PlusSmallIcon />
             </TouchableOpacity>
@@ -111,7 +128,7 @@ const styles = StyleSheet.create({
     minHeight: 64,
     padding: 15,
     alignItems: 'center',
-    justifyContent: 'space-around',
+    justifyContent: 'space-between',
     flexDirection: 'row',
     borderBottomWidth: 1,
     backgroundColor: 'white',
@@ -120,12 +137,6 @@ const styles = StyleSheet.create({
   headerText: {
     fontFamily: 'SFUIText-Medium',
     fontSize: 17,
-  },
-  headerPlus: {
-    position: 'absolute',
-    right: 15,
-    width: 16,
-    height: 16,
   },
   listTodo: {
     flex: 1,

@@ -14,6 +14,10 @@ class Auth {
   async getToken() {
     return await AsyncStorage.getItem(this.TOKEN);
   }
+
+  async clearToken() {
+    return await AsyncStorage.setItem(this.TOKEN, '');
+  }
 }
 
 export default new Auth();

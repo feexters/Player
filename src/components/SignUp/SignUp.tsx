@@ -28,9 +28,13 @@ const SignUp = ({navigation}: NavigationProps) => {
   const {isLoading} = useAppSelector(state => state.loader);
 
   const onSignUp = (email: string, password: string, name: string) => {
-    if (password.trim() && name.trim() && email.trim()) {
-      dispatch(authSingUp({email, password, name}));
-    }
+    dispatch(
+      authSingUp({
+        email: email.trim(),
+        password: password.trim(),
+        name: name.trim(),
+      }),
+    );
   };
 
   const onValidate = (email: string, password: string, name: string) => {
@@ -40,17 +44,17 @@ const SignUp = ({navigation}: NavigationProps) => {
       name: '',
     };
 
-    if (!email) {
+    if (!email || email.trim()) {
       errors.email = 'Required';
     } else if (!validateEmail(email)) {
       errors.email = 'Invalid address';
     }
 
-    if (!password) {
+    if (!password || password.trim()) {
       errors.password = 'Required';
     }
 
-    if (!name) {
+    if (!name || name.trim()) {
       errors.name = 'Required';
     }
 
