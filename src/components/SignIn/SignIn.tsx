@@ -14,6 +14,7 @@ import {authSingIn} from '@store/sagas';
 import {Form, Field} from 'react-final-form';
 import {Loader} from '@components/ui/Loader';
 import {Button} from '@components/ui';
+import {validateEmail} from '@lib/utils';
 
 type RootStackParamList = {
   SignIn: undefined;
@@ -32,6 +33,29 @@ const SignIn = ({navigation}: NavigationProps) => {
     }
   };
 
+  const onValidate = (email: string, password: string) => {
+    const errors = {
+      email: '',
+      password: '',
+    };
+
+    if (!email) {
+      errors.email = 'Required';
+    } else if (!validateEmail(email)) {
+      errors.email = 'Invalid address';
+    }
+
+    if (!password) {
+      errors.password = 'Required';
+    }
+
+    if (errors.email || errors.password) {
+      return errors;
+    }
+
+    return {};
+  };
+
   return (
     <SafeAreaView style={styles.body}>
       <View style={styles.container}>
@@ -41,37 +65,56 @@ const SignIn = ({navigation}: NavigationProps) => {
 
         <Form
           onSubmit={value => onSignIn(value.email, value.password)}
+          validate={value => onValidate(value.email, value.password)}
           initialValues={{email: '', password: ''}}
           render={({form}) => (
             <>
               <Field name="email">
-                {({input}) => (
-                  <TextInput
-                    style={styles.loginInput}
-                    onChangeText={input.onChange}
-                    value={input.value}
-                    placeholder="Email"
-                    autoCapitalize="none"
-                    placeholderTextColor="#9C9C9C"
-                    selectionColor="#72A8BC"
-                  />
+                {({input, meta}) => (
+                  <View
+                    style={[
+                      styles.inputWrap,
+                      meta.touched && meta.error && styles.validationBorder,
+                    ]}>
+                    <TextInput
+                      style={styles.loginInput}
+                      onChangeText={input.onChange}
+                      value={input.value}
+                      placeholder="Email"
+                      autoCapitalize="none"
+                      placeholderTextColor="#9C9C9C"
+                      selectionColor="#72A8BC"
+                    />
+                    <Text style={styles.validation}>
+                      {meta.touched && meta.error}
+                    </Text>
+                  </View>
                 )}
               </Field>
               <Field name="password">
-                {({input}) => (
-                  <TextInput
-                    onChangeText={input.onChange}
-                    value={input.value}
-                    secureTextEntry={true}
-                    style={styles.loginInput}
-                    placeholder="Password"
-                    autoCapitalize="none"
-                    placeholderTextColor="#9C9C9C"
-                    selectionColor="#72A8BC"
-                  />
+                {({input, meta}) => (
+                  <View
+                    style={[
+                      styles.inputWrap,
+                      meta.touched && meta.error && styles.validationBorder,
+                    ]}>
+                    <TextInput
+                      onChangeText={input.onChange}
+                      value={input.value}
+                      secureTextEntry={true}
+                      style={styles.loginInput}
+                      placeholder="Password"
+                      autoCapitalize="none"
+                      placeholderTextColor="#9C9C9C"
+                      selectionColor="#72A8BC"
+                    />
+                    <Text style={styles.validation}>
+                      {meta.touched && meta.error}
+                    </Text>
+                  </View>
                 )}
               </Field>
-              <Button onPress={() => form.submit()}>SING IN</Button>
+              <Button onPress={form.submit}>SING IN</Button>
             </>
           )}
         />
@@ -98,26 +141,20 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     padding: 10,
   },
-  loginInput: {
+  inputWrap: {
     width: '100%',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
     borderColor: 'rgb(229, 229, 229)',
     borderWidth: 1,
     borderRadius: 10,
-    padding: 15,
+    padding: 8,
     marginBottom: 10,
-    fontSize: 17,
   },
-  loginButton: {
-    backgroundColor: 'rgb(191, 179, 147)',
-    borderRadius: 15,
-    paddingHorizontal: 15,
-    paddingVertical: 5,
-    marginTop: 10,
-  },
-  loginButtonText: {
+  loginInput: {
+    flex: 1,
     fontSize: 17,
-    color: 'rgb(255, 255, 255)',
-    fontFamily: 'SFUIText-Bold',
   },
   signUp: {
     marginTop: 15,
@@ -130,6 +167,14 @@ const styles = StyleSheet.create({
   text: {
     fontSize: 17,
     fontFamily: 'SFUIText-Light',
+  },
+  validation: {
+    color: '#AC5253',
+    fontSize: 17,
+    fontFamily: 'SFUIText-Medium',
+  },
+  validationBorder: {
+    borderColor: '#AC5253',
   },
 });
 

@@ -14,6 +14,7 @@ import {
 import {authSingUp} from '@store/sagas';
 import {Loader} from '@components/ui/Loader';
 import {Button} from '@components/ui';
+import {validateEmail} from '@lib/utils';
 
 type RootStackParamList = {
   SignIn: undefined;
@@ -32,6 +33,34 @@ const SignUp = ({navigation}: NavigationProps) => {
     }
   };
 
+  const onValidate = (email: string, password: string, name: string) => {
+    const errors = {
+      email: '',
+      password: '',
+      name: '',
+    };
+
+    if (!email) {
+      errors.email = 'Required';
+    } else if (!validateEmail(email)) {
+      errors.email = 'Invalid address';
+    }
+
+    if (!password) {
+      errors.password = 'Required';
+    }
+
+    if (!name) {
+      errors.name = 'Required';
+    }
+
+    if (errors.email || errors.password || errors.name) {
+      return errors;
+    } else {
+      return {};
+    }
+  };
+
   return (
     <SafeAreaView style={styles.body}>
       <View style={styles.container}>
@@ -41,46 +70,76 @@ const SignUp = ({navigation}: NavigationProps) => {
         <Form
           onSubmit={value => onSignUp(value.email, value.password, value.name)}
           initialValues={{email: '', name: '', password: ''}}
+          validate={value =>
+            onValidate(value.email, value.password, value.name)
+          }
           render={({form}) => (
             <>
               <Field name="email">
-                {({input}) => (
-                  <TextInput
-                    style={styles.loginInput}
-                    onChangeText={input.onChange}
-                    value={input.value}
-                    autoCapitalize="none"
-                    placeholder="Email"
-                    placeholderTextColor="#9C9C9C"
-                    selectionColor="#72A8BC"
-                  />
+                {({input, meta}) => (
+                  <View
+                    style={[
+                      styles.inputWrap,
+                      meta.touched && meta.error && styles.validationBorder,
+                    ]}>
+                    <TextInput
+                      style={styles.loginInput}
+                      onChangeText={input.onChange}
+                      value={input.value}
+                      autoCapitalize="none"
+                      placeholder="Email"
+                      placeholderTextColor="#9C9C9C"
+                      selectionColor="#72A8BC"
+                    />
+                    <Text style={styles.validation}>
+                      {meta.touched && meta.error}
+                    </Text>
+                  </View>
                 )}
               </Field>
               <Field name="name">
-                {({input}) => (
-                  <TextInput
-                    style={styles.loginInput}
-                    onChangeText={input.onChange}
-                    value={input.value}
-                    placeholder="Name"
-                    autoCapitalize="none"
-                    placeholderTextColor="#9C9C9C"
-                    selectionColor="#72A8BC"
-                  />
+                {({input, meta}) => (
+                  <View
+                    style={[
+                      styles.inputWrap,
+                      meta.touched && meta.error && styles.validationBorder,
+                    ]}>
+                    <TextInput
+                      style={styles.loginInput}
+                      onChangeText={input.onChange}
+                      value={input.value}
+                      placeholder="Name"
+                      autoCapitalize="none"
+                      placeholderTextColor="#9C9C9C"
+                      selectionColor="#72A8BC"
+                    />
+                    <Text style={styles.validation}>
+                      {meta.touched && meta.error}
+                    </Text>
+                  </View>
                 )}
               </Field>
               <Field name="password">
-                {({input}) => (
-                  <TextInput
-                    onChangeText={input.onChange}
-                    value={input.value}
-                    secureTextEntry={true}
-                    style={styles.loginInput}
-                    autoCapitalize="none"
-                    placeholder="Password"
-                    placeholderTextColor="#9C9C9C"
-                    selectionColor="#72A8BC"
-                  />
+                {({input, meta}) => (
+                  <View
+                    style={[
+                      styles.inputWrap,
+                      meta.touched && meta.error && styles.validationBorder,
+                    ]}>
+                    <TextInput
+                      onChangeText={input.onChange}
+                      value={input.value}
+                      secureTextEntry={true}
+                      style={styles.loginInput}
+                      autoCapitalize="none"
+                      placeholder="Password"
+                      placeholderTextColor="#9C9C9C"
+                      selectionColor="#72A8BC"
+                    />
+                    <Text style={styles.validation}>
+                      {meta.touched && meta.error}
+                    </Text>
+                  </View>
                 )}
               </Field>
               <Button onPress={() => form.submit()}>SING UP</Button>
@@ -109,14 +168,28 @@ const styles = StyleSheet.create({
     padding: 10,
     backgroundColor: 'white',
   },
-  loginInput: {
+  inputWrap: {
     width: '100%',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
     borderColor: 'rgb(229, 229, 229)',
     borderWidth: 1,
     borderRadius: 10,
-    padding: 15,
+    padding: 8,
     marginBottom: 10,
+  },
+  loginInput: {
+    flex: 1,
     fontSize: 17,
+  },
+  validation: {
+    color: '#AC5253',
+    fontSize: 17,
+    fontFamily: 'SFUIText-Medium',
+  },
+  validationBorder: {
+    borderColor: '#AC5253',
   },
   singIn: {
     marginTop: 15,
