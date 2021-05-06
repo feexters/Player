@@ -206,6 +206,7 @@ const styles = StyleSheet.create({
     fontSize: 17,
     fontFamily: 'SFUIText-Regular',
     paddingVertical: 24,
+    paddingHorizontal: 15,
     borderBottomWidth: 1,
     borderBottomColor: '#72A8BC',
   },

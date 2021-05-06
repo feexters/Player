@@ -1,7 +1,7 @@
 import {PlusIcon} from '@assets/images/svg/PlusIcon';
 import React, {useMemo, useState} from 'react';
 import {StyleSheet, TouchableOpacity, View} from 'react-native';
-import {FlatList, ScrollView, TextInput} from 'react-native-gesture-handler';
+import {FlatList, TextInput} from 'react-native-gesture-handler';
 import {Form, Field} from 'react-final-form';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {PrayerPreview} from '@components/PrayerPreview';
@@ -74,51 +74,59 @@ const MyPrayers: React.FC<{column: ColumnData}> = ({column}) => {
           )}
         />
 
-        <View style={styles.prayerList}>
-          <FlatList
-            data={columnPrayers.filter(item => !item.checked)}
-            removeClippedSubviews={false}
-            renderItem={({item}) => (
-              <PrayerPreview
-                key={item.id}
-                prayer={item}
-                // onPress={() => onPress(item)}
+        <FlatList
+          data={columnPrayers.filter(item => !item.checked)}
+          removeClippedSubviews={false}
+          ListHeaderComponent={
+            <View style={styles.prayerList}>
+              <FlatList
+                data={columnPrayers.filter(item => !item.checked)}
+                removeClippedSubviews={false}
+                renderItem={({item}) => (
+                  <PrayerPreview
+                    key={item.id}
+                    prayer={item}
+                    // onPress={() => onPress(item)}
+                  />
+                )}
               />
-            )}
-          />
-        </View>
-
-        <View style={styles.answered}>
-          {isHide ? (
-            <View style={styles.answeredButton}>
-              <Button onPress={() => setIsHide(!isHide)}>
-                SHOW ANSWERED PRAYERS
-              </Button>
             </View>
-          ) : (
-            <>
-              <View style={styles.answeredButton}>
-                <Button onPress={() => setIsHide(!isHide)}>
-                  HIDE ANSWERED PRAYERS
-                </Button>
-              </View>
-              <View style={styles.answeredLine} />
-              <View style={styles.prayerList}>
-                <FlatList
-                  data={columnPrayers.filter(item => item.checked)}
-                  removeClippedSubviews={false}
-                  renderItem={({item}) => (
-                    <PrayerPreview
-                      key={item.id}
-                      prayer={item}
-                      // onPress={() => onPress(item)}
+          }
+          ListFooterComponent={
+            <View style={styles.answered}>
+              {isHide ? (
+                <View style={styles.answeredButton}>
+                  <Button onPress={() => setIsHide(!isHide)}>
+                    SHOW ANSWERED PRAYERS
+                  </Button>
+                </View>
+              ) : (
+                <>
+                  <View style={styles.answeredButton}>
+                    <Button onPress={() => setIsHide(!isHide)}>
+                      HIDE ANSWERED PRAYERS
+                    </Button>
+                  </View>
+                  <View style={styles.answeredLine} />
+                  <View style={styles.prayerList}>
+                    <FlatList
+                      data={columnPrayers.filter(item => item.checked)}
+                      removeClippedSubviews={false}
+                      renderItem={({item}) => (
+                        <PrayerPreview
+                          key={item.id}
+                          prayer={item}
+                          // onPress={() => onPress(item)}
+                        />
+                      )}
                     />
-                  )}
-                />
-              </View>
-            </>
-          )}
-        </View>
+                  </View>
+                </>
+              )}
+            </View>
+          }
+          renderItem={() => <></>}
+        />
       </View>
     </SafeAreaView>
   );
@@ -153,7 +161,6 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   answered: {
-    flex: 1,
     width: '100%',
   },
   answeredButton: {
