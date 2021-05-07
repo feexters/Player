@@ -14,7 +14,8 @@ import {authSingIn} from '@store/sagas';
 import {Form, Field} from 'react-final-form';
 import {Loader} from '@components/ui/Loader';
 import {Button} from '@components/ui';
-import {validateEmail} from '@lib/utils';
+import {Validation} from '@lib/utils';
+import {SignInData} from '@lib/interfaces';
 
 type RootStackParamList = {
   SignIn: undefined;
@@ -27,31 +28,21 @@ const SignIn = ({navigation}: NavigationProps) => {
   const dispatch = useAppDispatch();
   const {isLoading} = useAppSelector(state => state.loader);
 
-  const onSignIn = (email: string, password: string) => {
+  const onSignIn = ({email, password}: SignInData) => {
     dispatch(authSingIn({email: email.trim(), password: password.trim()}));
   };
 
-  const onValidate = (email: string, password: string) => {
+  const onValidate = ({email, password}: SignInData) => {
     const errors = {
-      email: '',
-      password: '',
+      email: Validation.email(email),
+      password: Validation.validation(password),
     };
-
-    if (!email || !email.trim()) {
-      errors.email = 'Required';
-    } else if (!validateEmail(email)) {
-      errors.email = 'Invalid address';
-    }
-
-    if (!password || !password.trim()) {
-      errors.password = 'Required';
-    }
 
     if (errors.email || errors.password) {
       return errors;
+    } else {
+      return {};
     }
-
-    return {};
   };
 
   return (
@@ -62,8 +53,8 @@ const SignIn = ({navigation}: NavigationProps) => {
         {isLoading && <Loader />}
 
         <Form
-          onSubmit={value => onSignIn(value.email, value.password)}
-          validate={value => onValidate(value.email, value.password)}
+          onSubmit={value => onSignIn(value as SignInData)}
+          validate={value => onValidate(value as SignInData)}
           initialValues={{email: '', password: ''}}
           render={({form}) => (
             <>

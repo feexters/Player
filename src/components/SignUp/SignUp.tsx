@@ -14,7 +14,8 @@ import {
 import {authSingUp} from '@store/sagas';
 import {Loader} from '@components/ui/Loader';
 import {Button} from '@components/ui';
-import {validateEmail} from '@lib/utils';
+import {Validation} from '@lib/utils';
+import {SignUpData} from '@lib/interfaces';
 
 type RootStackParamList = {
   SignIn: undefined;
@@ -27,7 +28,7 @@ const SignUp = ({navigation}: NavigationProps) => {
   const dispatch = useAppDispatch();
   const {isLoading} = useAppSelector(state => state.loader);
 
-  const onSignUp = (email: string, password: string, name: string) => {
+  const onSignUp = ({email, password, name}: SignUpData) => {
     dispatch(
       authSingUp({
         email: email.trim(),
@@ -37,26 +38,12 @@ const SignUp = ({navigation}: NavigationProps) => {
     );
   };
 
-  const onValidate = (email: string, password: string, name: string) => {
+  const onValidate = ({email, password, name}: SignUpData) => {
     const errors = {
-      email: '',
-      password: '',
-      name: '',
+      email: Validation.email(email),
+      password: Validation.validation(password),
+      name: Validation.validation(name),
     };
-
-    if (!email || email.trim()) {
-      errors.email = 'Required';
-    } else if (!validateEmail(email)) {
-      errors.email = 'Invalid address';
-    }
-
-    if (!password || password.trim()) {
-      errors.password = 'Required';
-    }
-
-    if (!name || name.trim()) {
-      errors.name = 'Required';
-    }
 
     if (errors.email || errors.password || errors.name) {
       return errors;
@@ -72,11 +59,9 @@ const SignUp = ({navigation}: NavigationProps) => {
         {isLoading && <Loader />}
 
         <Form
-          onSubmit={value => onSignUp(value.email, value.password, value.name)}
+          onSubmit={value => onSignUp(value as SignUpData)}
           initialValues={{email: '', name: '', password: ''}}
-          validate={value =>
-            onValidate(value.email, value.password, value.name)
-          }
+          validate={value => onValidate(value as SignUpData)}
           render={({form}) => (
             <>
               <Field name="email">
