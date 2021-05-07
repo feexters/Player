@@ -10,6 +10,8 @@ import {useAppDispatch, useAppSelector} from '@lib/hooks';
 import {Loader} from '@components/ui';
 import {LogoutModal} from '@components/LogoutModal';
 import {logout} from '@store';
+import {PrayerData} from '@lib/interfaces';
+import {getAllComments, getPrayerById} from '@store/sagas';
 
 type NavigationProps = StackScreenProps<RootStackParamList, 'Column'>;
 
@@ -23,6 +25,14 @@ const Column: React.FC<NavigationProps> = ({route, navigation}) => {
 
   const onLogout = () => {
     dispatch(logout());
+  };
+
+  const onNavigate = (prayer: PrayerData) => {
+    dispatch(getAllComments());
+    dispatch(getPrayerById(prayer.id));
+    navigation.navigate('Prayer', {
+      prayer,
+    });
   };
 
   React.useLayoutEffect(() => {
@@ -60,7 +70,7 @@ const Column: React.FC<NavigationProps> = ({route, navigation}) => {
           {() => (
             <>
               {isLoading && <Loader />}
-              <MyPrayers column={column} />
+              <MyPrayers column={column} onNavigate={onNavigate} />
             </>
           )}
         </Tab.Screen>

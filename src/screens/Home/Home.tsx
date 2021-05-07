@@ -7,6 +7,7 @@ import {useAppSelector} from '@lib/hooks';
 import React from 'react';
 import {Column} from '@screens/Column';
 import {StyleSheet} from 'react-native';
+import {Prayer} from '@components/Prayer';
 
 const Stack = createStackNavigator();
 
@@ -29,6 +30,11 @@ const Home = () => {
               options={{headerShown: false}}
             />
             <Stack.Screen name="Column" component={Column} />
+            <Stack.Screen
+              name="Prayer"
+              component={Prayer}
+              // options={{headerShown: false}}
+            />
           </Stack.Navigator>
         </NavigationContainer>
       ) : (

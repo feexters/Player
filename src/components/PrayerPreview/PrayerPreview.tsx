@@ -6,14 +6,10 @@ import {
   Vibration,
   View,
   TouchableOpacity,
+  Pressable,
 } from 'react-native';
 import {Form, Field} from 'react-final-form';
-import {
-  LongPressGestureHandler,
-  State,
-  Swipeable,
-  TextInput,
-} from 'react-native-gesture-handler';
+import {Swipeable, TextInput} from 'react-native-gesture-handler';
 import {UserIcon} from '@assets/images/svg/UserIcon';
 import {HandsIcon} from '@assets/images/svg/HandsIcon';
 import BouncyCheckbox from 'react-native-bouncy-checkbox';
@@ -21,7 +17,12 @@ import {VectorIcon} from '@assets/images/svg/VectorIcon';
 import {deletePrayer, updatePrayer} from '@store/sagas';
 import {useAppDispatch} from '@lib/hooks';
 
-const PrayerPreview: React.FC<{prayer: PrayerData}> = ({prayer}) => {
+interface PrayerPreviewProps {
+  prayer: PrayerData;
+  onPress(): void;
+}
+
+const PrayerPreview: React.FC<PrayerPreviewProps> = ({prayer, onPress}) => {
   const [isVisibleInput, setIsVisibleInput] = useState(false);
   const dispatch = useAppDispatch();
 
@@ -64,6 +65,11 @@ const PrayerPreview: React.FC<{prayer: PrayerData}> = ({prayer}) => {
     Vibration.vibrate([0, 50]);
   };
 
+  const onLongPress = () => {
+    setIsVisibleInput(!isVisibleInput);
+    Vibration.vibrate([0, 50]);
+  };
+
   return (
     <>
       {isVisibleInput ? (
@@ -90,14 +96,7 @@ const PrayerPreview: React.FC<{prayer: PrayerData}> = ({prayer}) => {
         />
       ) : (
         <Swipeable renderRightActions={renderRightActions}>
-          <LongPressGestureHandler
-            onHandlerStateChange={({nativeEvent}) => {
-              if (nativeEvent.state === State.ACTIVE) {
-                setIsVisibleInput(!isVisibleInput);
-                Vibration.vibrate([0, 50]);
-              }
-            }}
-            minDurationMs={500}>
+          <Pressable onPress={onPress} onLongPress={onLongPress}>
             <View style={styles.wrap}>
               <View style={styles.prayer}>
                 <View style={styles.prayerItemsWrap}>
@@ -128,15 +127,11 @@ const PrayerPreview: React.FC<{prayer: PrayerData}> = ({prayer}) => {
                   />
 
                   {!prayer.checked ? (
-                    <Text
-                      onPress={() => {}}
-                      numberOfLines={1}
-                      style={styles.prayerText}>
+                    <Text numberOfLines={1} style={styles.prayerText}>
                       {prayer.title}
                     </Text>
                   ) : (
                     <Text
-                      onPress={() => {}}
                       numberOfLines={1}
                       style={[styles.prayerText, styles.prayerTextLine]}>
                       {prayer.title}
@@ -156,7 +151,7 @@ const PrayerPreview: React.FC<{prayer: PrayerData}> = ({prayer}) => {
                 </View>
               </View>
             </View>
-          </LongPressGestureHandler>
+          </Pressable>
         </Swipeable>
       )}
     </>

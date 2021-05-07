@@ -6,3 +6,6 @@ export type {ColumnUpdateData} from './ColumnUpdateData';
 export type {PrayerData} from './PrayerData';
 export type {PrayerActionData} from './PrayerActionData';
 export type {PrayerUpdateData} from './PrayerUpdateData';
+export type {CommentActionData} from './CommentActionData';
+export type {CommentUpdateData} from './CommentUpdateData';
+export type {CommentData} from './CommentData';

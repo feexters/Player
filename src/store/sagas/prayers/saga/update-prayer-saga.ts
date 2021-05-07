@@ -1,9 +1,8 @@
 import {put, takeEvery, call} from 'redux-saga/effects';
-import axios from 'axios';
-import {Auth} from '@lib/utils';
 import {PRAYERS_UPDATE, getAllPrayers} from '../actions';
 import {PrayerUpdateData} from '@lib/interfaces';
 import {loading} from '@store/slices';
+import {instance} from '@lib/utils/instance';
 
 interface UpdatePrayerWorker {
   type: string;
@@ -22,19 +21,9 @@ function* updatePrayerWorker({payload}: UpdatePrayerWorker) {
 }
 
 async function fetchUpdatePrayer(prayer: PrayerUpdateData) {
-  const token = await Auth.getToken().then(res => res);
   const {title, description, checked} = prayer;
-
-  return await axios
-    .put(
-      `https://prayer.herokuapp.com/prayers/${prayer.id}`,
-      {title, description, checked},
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      },
-    )
+  return await (await instance())
+    .put(`prayers/${prayer.id}`, {title, description, checked})
     .catch(e => console.log(e));
 }
 

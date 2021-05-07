@@ -1,8 +1,7 @@
 import {put, takeEvery, call} from 'redux-saga/effects';
-import axios from 'axios';
-import {Auth} from '@lib/utils';
 import {COLUMNS_DELETE, getAllColumns} from '../actions';
 import {loading} from '@store/slices';
+import {instance} from '@lib/utils/instance';
 
 interface DeleteColumnWorker {
   type: string;
@@ -21,14 +20,8 @@ function* deleteColumnWorker({payload}: DeleteColumnWorker) {
 }
 
 async function fetchDeleteColumn(id: number) {
-  const token = await Auth.getToken().then(res => res);
-
-  return await axios
-    .delete(`https://prayer.herokuapp.com/columns/${id}`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    })
+  return await (await instance())
+    .delete(`columns/${id}`)
     .catch(e => console.log(e));
 }
 

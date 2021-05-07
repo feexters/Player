@@ -1,9 +1,8 @@
 import {put, takeEvery, call, StrictEffect} from 'redux-saga/effects';
-import axios from 'axios';
-import {Auth} from '@lib/utils';
 import {COLUMNS_GET_ALL} from '../actions/actions';
 import {ColumnData} from '@lib/interfaces';
 import {loading, setColumns} from '@store/slices';
+import {instance} from '@lib/utils/instance';
 
 function* getAllColumnsWorker(): Generator<StrictEffect, void, ColumnData[]> {
   try {
@@ -17,13 +16,8 @@ function* getAllColumnsWorker(): Generator<StrictEffect, void, ColumnData[]> {
 }
 
 async function fetchAllColumns(): Promise<ColumnData[]> {
-  const token = await Auth.getToken().then(res => res);
-  return await axios
-    .get('https://prayer.herokuapp.com/columns', {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    })
+  return await (await instance())
+    .get('columns')
     .then(response => response.data)
     .catch(e => console.log(e));
 }

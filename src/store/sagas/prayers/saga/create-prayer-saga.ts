@@ -1,10 +1,9 @@
 import {put, takeEvery, call, StrictEffect} from 'redux-saga/effects';
-import axios from 'axios';
-import {Auth} from '@lib/utils';
 import {PRAYERS_CREATE} from '../actions';
 import {PrayerData} from '@lib/interfaces';
 import {addPrayer, loading} from '@store/slices';
 import {PrayerActionData} from '@lib/interfaces';
+import {instance} from '@lib/utils/instance';
 
 interface CreatePrayerWorker {
   type: string;
@@ -27,24 +26,13 @@ function* createPrayerWorker({
 async function fetchCreatePrayer(
   prayer: PrayerActionData,
 ): Promise<PrayerData> {
-  const token = await Auth.getToken().then(res => res);
-
   const postPrayer = {
     title: prayer.title,
     description: prayer.description,
     checked: prayer.checked,
   };
-
-  return await axios
-    .post(
-      `https://prayer.herokuapp.com/columns/${prayer.columnId}/prayers`,
-      postPrayer,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      },
-    )
+  return await (await instance())
+    .post(`columns/${prayer.columnId}/prayers`, postPrayer)
     .then(response => response.data)
     .catch(e => console.log(e));
 }

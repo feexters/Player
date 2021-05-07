@@ -2,9 +2,9 @@ import {Alert} from 'react-native';
 import {put, takeEvery, call, StrictEffect} from 'redux-saga/effects';
 import {AUTH_SIGN_UP} from '../actions/actions';
 import {SignUpData} from '@lib/interfaces';
-import axios from 'axios';
 import {authSingIn} from '../actions';
 import {loading} from '@store/slices';
+import {instance} from '@lib/utils/instance';
 
 export interface SingUpWorker {
   type: string;
@@ -17,7 +17,6 @@ function* signUpWorker({
   try {
     yield put(loading(true));
     const response = yield call(() => fetchSignUp(payload));
-
     if (response === 'QueryFailedError') {
       Alert.alert('This user already exist');
     } else {
@@ -31,8 +30,8 @@ function* signUpWorker({
 }
 
 async function fetchSignUp(user: SignUpData) {
-  return await axios
-    .post('https://prayer.herokuapp.com/auth/sign-up', user)
+  return await (await instance())
+    .post('auth/sign-up', user)
     .then(response => {
       return response.data.name;
     })

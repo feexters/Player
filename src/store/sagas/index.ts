@@ -14,3 +14,10 @@ export {
   deletePrayer,
   updatePrayer,
 } from './prayers';
+export {
+  getCommentById,
+  getAllComments,
+  createComment,
+  deleteComment,
+  updateComment,
+} from './comments';

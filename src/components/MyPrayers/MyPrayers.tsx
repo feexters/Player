@@ -8,9 +8,14 @@ import {PrayerPreview} from '@components/PrayerPreview';
 import {Button, Loader} from '@components/ui';
 import {useAppDispatch, useAppSelector} from '@lib/hooks';
 import {createPrayer} from '@store/sagas';
-import {ColumnData} from '@lib/interfaces';
+import {ColumnData, PrayerData} from '@lib/interfaces';
 
-const MyPrayers: React.FC<{column: ColumnData}> = ({column}) => {
+interface MyPrayersProps {
+  column: ColumnData;
+  onNavigate(prayer: PrayerData): void;
+}
+
+const MyPrayers: React.FC<MyPrayersProps> = ({column, onNavigate}) => {
   const [isHide, setIsHide] = useState(false);
   const dispatch = useAppDispatch();
   const prayers = useAppSelector(state => state.prayers);
@@ -86,7 +91,7 @@ const MyPrayers: React.FC<{column: ColumnData}> = ({column}) => {
                   <PrayerPreview
                     key={item.id}
                     prayer={item}
-                    // onPress={() => onPress(item)}
+                    onPress={() => onNavigate(item)}
                   />
                 )}
               />
@@ -116,7 +121,7 @@ const MyPrayers: React.FC<{column: ColumnData}> = ({column}) => {
                         <PrayerPreview
                           key={item.id}
                           prayer={item}
-                          // onPress={() => onPress(item)}
+                          onPress={() => onNavigate(item)}
                         />
                       )}
                     />

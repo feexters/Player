@@ -1,9 +1,8 @@
 import {put, takeEvery, call} from 'redux-saga/effects';
-import axios from 'axios';
-import {Auth} from '@lib/utils';
 import {COLUMNS_UPDATE, getAllColumns} from '../actions';
 import {ColumnUpdateData} from '@lib/interfaces';
 import {loading} from '@store/slices';
+import {instance} from '@lib/utils/instance';
 
 interface UpdateColumnWorker {
   type: string;
@@ -22,19 +21,10 @@ function* updateColumnWorker({payload}: UpdateColumnWorker) {
 }
 
 async function fetchUpdateColumn(column: ColumnUpdateData) {
-  const token = await Auth.getToken().then(res => res);
   const {title, description} = column;
 
-  return await axios
-    .put(
-      `https://prayer.herokuapp.com/columns/${column.id}`,
-      {title, description},
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      },
-    )
+  return await (await instance())
+    .put(`columns/${column.id}`, {title, description})
     .catch(e => console.log(e));
 }
 

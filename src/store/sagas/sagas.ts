@@ -7,6 +7,13 @@ import {
   watchUpdateColumn,
 } from './columns';
 import {
+  watchCreateComment,
+  watchDeleteComment,
+  watchGetAllComments,
+  watchUpdateComment,
+} from './comments';
+import {
+  watchGetPrayer,
   watchGetAllPrayers,
   watchCreatePrayer,
   watchDeletePrayer,
@@ -25,5 +32,10 @@ export default function* rootSaga() {
     watchCreatePrayer(),
     watchDeletePrayer(),
     watchUpdatePrayer(),
+    watchGetPrayer(),
+    watchGetAllComments(),
+    watchCreateComment(),
+    watchDeleteComment(),
+    watchUpdateComment(),
   ]);
 }

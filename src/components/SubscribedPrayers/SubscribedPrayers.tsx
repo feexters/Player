@@ -4,10 +4,15 @@ import {FlatList} from 'react-native-gesture-handler';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {Button, Loader} from '@components/ui';
 import {useAppSelector} from '@lib/hooks';
-import {ColumnData} from '@lib/interfaces';
+import {ColumnData, PrayerData} from '@lib/interfaces';
 import {PrayerPreview} from '@components/PrayerPreview';
 
-const MyPrayers: React.FC<{column: ColumnData}> = () => {
+interface SubscribedPrayersProps {
+  column: ColumnData;
+  onNavigate(prayer: PrayerData): void;
+}
+
+const SubscribedPrayers: React.FC<SubscribedPrayersProps> = ({onNavigate}) => {
   const [isHide, setIsHide] = useState(false);
   const {isLoading} = useAppSelector(state => state.loader);
 
@@ -50,7 +55,7 @@ const MyPrayers: React.FC<{column: ColumnData}> = () => {
               <PrayerPreview
                 key={item.id}
                 prayer={item}
-                // onPress={() => onPress(item)}
+                onPress={() => onNavigate(item)}
               />
             )}
           />
@@ -79,7 +84,7 @@ const MyPrayers: React.FC<{column: ColumnData}> = () => {
                     <PrayerPreview
                       key={item.id}
                       prayer={item}
-                      // onPress={() => onPress(item)}
+                      onPress={() => onNavigate(item)}
                     />
                   )}
                 />
@@ -117,4 +122,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default MyPrayers;
+export default SubscribedPrayers;

@@ -3,8 +3,8 @@ import {put, takeEvery, call, StrictEffect} from 'redux-saga/effects';
 import {authorized, loading} from '@store/slices';
 import {AUTH_SIGN_IN} from '../actions';
 import {SignInData} from '@lib/interfaces';
-import axios from 'axios';
 import {getAllColumns} from '@store/sagas/columns';
+import {instance} from '@lib/utils/instance';
 
 export interface SingInWorker {
   type: string;
@@ -31,12 +31,9 @@ function* signInWorker({
 }
 
 async function fetchSignIn(user: SignInData) {
-  return await axios
-    .post('https://prayer.herokuapp.com/auth/sign-in', user)
-    .then(response => {
-      return response.data.token;
-    })
-    .catch(e => console.log(e));
+  return await (await instance()).post('auth/sign-in', user).then(response => {
+    return response.data.token;
+  });
 }
 
 export function* watchSignIn() {

@@ -1,10 +1,9 @@
 import {put, takeEvery, call, StrictEffect} from 'redux-saga/effects';
-import axios from 'axios';
-import {Auth} from '@lib/utils';
 import {COLUMNS_CREATE} from '../actions/actions';
 import {ColumnData} from '@lib/interfaces';
 import {addColumn, loading} from '@store/slices';
 import {ColumnActionData} from '@lib/interfaces/ColumnActionData';
+import {instance} from '@lib/utils/instance';
 
 interface CreateColumnWorker {
   type: string;
@@ -27,14 +26,8 @@ function* createColumnWorker({
 async function fetchCreateColumn(
   column: ColumnActionData,
 ): Promise<ColumnData> {
-  const token = await Auth.getToken().then(res => res);
-
-  return await axios
-    .post('https://prayer.herokuapp.com/columns', column, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    })
+  return await (await instance())
+    .post('/columns', column)
     .then(response => response.data)
     .catch(e => console.log(e));
 }

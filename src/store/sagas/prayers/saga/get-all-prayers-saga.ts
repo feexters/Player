@@ -1,9 +1,8 @@
 import {put, takeEvery, call, StrictEffect} from 'redux-saga/effects';
-import axios from 'axios';
-import {Auth} from '@lib/utils';
 import {PRAYERS_GET_ALL} from '../actions';
 import {PrayerData} from '@lib/interfaces';
 import {loading, setPrayers} from '@store/slices';
+import {instance} from '@lib/utils/instance';
 
 function* getAllPrayersWorker(): Generator<StrictEffect, void, PrayerData[]> {
   try {
@@ -17,14 +16,8 @@ function* getAllPrayersWorker(): Generator<StrictEffect, void, PrayerData[]> {
 }
 
 async function fetchAllPrayers(): Promise<PrayerData[]> {
-  const token = await Auth.getToken().then(res => res);
-  console.log(token);
-  return await axios
-    .get('https://prayer.herokuapp.com/prayers', {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    })
+  return await (await instance())
+    .get('prayers')
     .then(response => response.data)
     .catch(e => console.log(e));
 }
