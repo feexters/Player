@@ -1,19 +1,26 @@
 import {StackScreenProps} from '@react-navigation/stack';
 import {BackIcon} from '@assets/images/svg/BackIcon';
 import {RootStackParamList} from 'lib/types';
-import React from 'react';
+import React, {useMemo} from 'react';
 import {View, Text, StyleSheet, Pressable, StatusBar} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {HandsIcon} from '@assets/images/svg/HandsIcon';
 import {PlusSmallIcon} from '@assets/images/svg/PlusSmallIcon';
-import {Comments} from './components/Comments';
 import {useAppSelector} from '@lib/hooks';
+import {FlatList} from 'react-native-gesture-handler';
+import {CommentPreview} from './components/CommentPreview';
+import {CommentInput} from './components/CommentsInput';
+import {Loader} from '@components/ui';
 
 type NavigationProps = StackScreenProps<RootStackParamList, 'Prayer'>;
 
 const Prayer: React.FC<NavigationProps> = ({route, navigation}) => {
   const {prayer} = route.params;
-  const {prayers} = useAppSelector(state => state);
+  const {
+    prayers,
+    comments,
+    loader: {isLoading},
+  } = useAppSelector(state => state);
   const prayerDate = Date.parse(prayers.date);
   const date = new Date(prayerDate);
 
@@ -35,6 +42,11 @@ const Prayer: React.FC<NavigationProps> = ({route, navigation}) => {
   const dateFormat = `${
     monthNames[date.getMonth()]
   } ${date.getDate()} ${date.getFullYear()}`;
+
+  const prayerComments = useMemo(
+    () => comments.list.filter(item => prayer.id === item.prayerId),
+    [comments.list, prayer.id],
+  );
 
   React.useLayoutEffect(() => {
     navigation.setOptions({
@@ -59,54 +71,65 @@ const Prayer: React.FC<NavigationProps> = ({route, navigation}) => {
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar backgroundColor={'#BFB393'} barStyle={'light-content'} />
+      {isLoading && <Loader />}
 
       <View style={styles.headerWrap}>
         <Text style={styles.headerTitle}>{prayer.title}</Text>
       </View>
 
-      <View style={[styles.prayedLast, styles.borderBottom]}>
-        <View style={styles.prayedLine} />
-        <Text style={styles.text}>Last prayed 8 min ago</Text>
-      </View>
-
-      <View style={[styles.prayerInfoRow, styles.borderBottom]}>
-        <View style={[styles.prayerItemDate, styles.borderRight]}>
-          <Text style={styles.prayerDateText}>{dateFormat}</Text>
-          <Text style={styles.prayerInfoText}>Date Added</Text>
-          <Text style={[styles.prayerInfoText, styles.prayerOpened]}>
-            Opened for 4 days
-          </Text>
-        </View>
-        <View style={[styles.prayerItem, styles.borderRight]}>
-          <Text style={styles.prayerInfoNumber}>123</Text>
-          <Text style={styles.prayerInfoText}>Times Prayed Total</Text>
-        </View>
-      </View>
-
-      <View style={[styles.prayerInfoRow, styles.borderBottom]}>
-        <View style={[styles.prayerItem, styles.borderRight]}>
-          <Text style={styles.prayerInfoNumber}>63</Text>
-          <Text style={styles.prayerInfoText}>Times Prayed by Me</Text>
-        </View>
-        <View style={[styles.prayerItem, styles.borderRight]}>
-          <Text style={styles.prayerInfoNumber}>60</Text>
-          <Text style={styles.prayerInfoText}>Times Prayed by Others</Text>
-        </View>
-      </View>
-
-      <View style={[styles.mainWrap, styles.borderBottom]}>
-        <View>
-          <Text style={styles.mainTitle}>MEMBERS</Text>
-          <View style={styles.memberList}>
-            <View style={styles.memberImage}>
-              <PlusSmallIcon color="white" />
+      <FlatList
+        data={prayerComments}
+        removeClippedSubviews={false}
+        renderItem={({item}) => <CommentPreview key={item.id} comment={item} />}
+        ListHeaderComponent={
+          <>
+            <View style={[styles.prayedLast, styles.borderBottom]}>
+              <View style={styles.prayedLine} />
+              <Text style={styles.text}>Last prayed 8 min ago</Text>
             </View>
-          </View>
-        </View>
-        <Text style={styles.mainTitle}>COMMENTS</Text>
-      </View>
 
-      <Comments prayer={prayer} />
+            <View style={[styles.prayerInfoRow, styles.borderBottom]}>
+              <View style={[styles.prayerItemDate, styles.borderRight]}>
+                <Text style={styles.prayerDateText}>{dateFormat}</Text>
+                <Text style={styles.prayerInfoText}>Date Added</Text>
+                <Text style={[styles.prayerInfoText, styles.prayerOpened]}>
+                  Opened for 4 days
+                </Text>
+              </View>
+              <View style={[styles.prayerItem, styles.borderRight]}>
+                <Text style={styles.prayerInfoNumber}>123</Text>
+                <Text style={styles.prayerInfoText}>Times Prayed Total</Text>
+              </View>
+            </View>
+
+            <View style={[styles.prayerInfoRow, styles.borderBottom]}>
+              <View style={[styles.prayerItem, styles.borderRight]}>
+                <Text style={styles.prayerInfoNumber}>63</Text>
+                <Text style={styles.prayerInfoText}>Times Prayed by Me</Text>
+              </View>
+              <View style={[styles.prayerItem, styles.borderRight]}>
+                <Text style={styles.prayerInfoNumber}>60</Text>
+                <Text style={styles.prayerInfoText}>
+                  Times Prayed by Others
+                </Text>
+              </View>
+            </View>
+
+            <View style={[styles.mainWrap, styles.borderBottom]}>
+              <View>
+                <Text style={styles.mainTitle}>MEMBERS</Text>
+                <View style={styles.memberList}>
+                  <View style={styles.memberImage}>
+                    <PlusSmallIcon color="white" />
+                  </View>
+                </View>
+              </View>
+              <Text style={styles.mainTitle}>COMMENTS</Text>
+            </View>
+          </>
+        }
+        ListFooterComponent={<CommentInput prayer={prayer} />}
+      />
     </SafeAreaView>
   );
 };

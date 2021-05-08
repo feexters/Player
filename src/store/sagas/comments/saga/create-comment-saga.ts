@@ -16,7 +16,6 @@ function* createCommentWorker({
   try {
     yield put(loading(true));
     const comment = yield call(() => fetchCreateComment(payload));
-    console.log('comment');
     yield put(addComment(comment));
     yield put(loading(false));
   } catch (e) {
