@@ -12,6 +12,7 @@ import {Form, Field} from 'react-final-form';
 import {Swipeable, TextInput} from 'react-native-gesture-handler';
 import {deleteComment, updateComment} from '@store/sagas';
 import {useAppDispatch} from '@lib/hooks';
+import {UserIcon} from '@assets/images/svg/UserIcon';
 
 const CommentPreview: React.FC<{comment: CommentData}> = ({comment}) => {
   const [isVisibleInput, setIsVisibleInput] = useState(false);
@@ -70,13 +71,22 @@ const CommentPreview: React.FC<{comment: CommentData}> = ({comment}) => {
       ) : (
         <Swipeable renderRightActions={renderRightActions}>
           <Pressable onLongPress={onLongPress}>
-            <View style={styles.wrap}>
-              <View style={styles.comment}>
-                <View style={styles.commentItemsWrap}>
-                  <Text numberOfLines={1} style={styles.commentText}>
-                    {comment.body}
+            <View style={styles.comment}>
+              <View style={styles.commentImage}>
+                <UserIcon color="white" />
+              </View>
+              <View style={styles.commentItemsWrap}>
+                <View style={styles.commentInfo}>
+                  <Text style={[styles.commentText, styles.commentUserName]}>
+                    Anna Barber
+                  </Text>
+                  <Text style={[styles.commentText, styles.commentDate]}>
+                    2 days ago
                   </Text>
                 </View>
+                <Text numberOfLines={1} style={styles.commentText}>
+                  {comment.body}
+                </Text>
               </View>
             </View>
           </Pressable>
@@ -87,43 +97,35 @@ const CommentPreview: React.FC<{comment: CommentData}> = ({comment}) => {
 };
 
 const styles = StyleSheet.create({
-  wrap: {
-    width: '100%',
-    backgroundColor: 'white',
-  },
   comment: {
     flex: 1,
     paddingVertical: 24,
     borderBottomWidth: 1,
-    marginHorizontal: 15,
+    paddingHorizontal: 15,
     borderBottomColor: '#E5E5E5',
     backgroundColor: 'white',
     flexDirection: 'row',
-    justifyContent: 'space-between',
     alignItems: 'center',
   },
   commentItemsWrap: {
     flex: 1,
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  commentIconsWrap: {
-    flexDirection: 'row',
+    flexDirection: 'column',
+    alignItems: 'flex-start',
+    marginLeft: 9,
   },
   commentText: {
-    width: '70%',
     fontSize: 17,
-    fontFamily: 'SFUIText-Regular',
-    marginLeft: 15,
+    fontFamily: 'SFUIText-Light',
+    lineHeight: 20,
   },
-  commentTextLine: {
-    textDecorationLine: 'line-through',
-    textDecorationStyle: 'solid',
+  commentUserName: {
+    fontFamily: 'SFUIText-Bold',
+    marginRight: 6,
+    marginBottom: 2,
   },
-  commentCheckbox: {
-    borderColor: '#514D47',
-    borderRadius: 4,
-    marginLeft: 15,
+  commentDate: {
+    fontSize: 13,
+    color: '#9C9C9C',
   },
   commentInput: {
     fontSize: 17,
@@ -132,6 +134,18 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
     borderBottomWidth: 1,
     borderBottomColor: '#72A8BC',
+  },
+  commentInfo: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  commentImage: {
+    backgroundColor: '#BFB393',
+    width: 32,
+    height: 32,
+    borderRadius: 16,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   delete: {
     height: '100%',

@@ -62,7 +62,8 @@ const styles = StyleSheet.create({
   commentForm: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginVertical: 15,
+    marginTop: 15,
+    marginBottom: 20,
   },
   inputButton: {
     paddingHorizontal: 14,
