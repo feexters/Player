@@ -2,7 +2,7 @@ import {Alert} from 'react-native';
 import {put, takeEvery, call, StrictEffect} from 'redux-saga/effects';
 import {authorized, loading} from '@store/slices';
 import {AUTH_SIGN_IN} from '../actions';
-import {SignInData} from '@lib/interfaces';
+import {SignInData, UserData} from '@lib/interfaces';
 import {getAllColumns} from '@store/sagas/columns';
 import {instance} from '@lib/utils/instance';
 
@@ -13,15 +13,15 @@ export interface SingInWorker {
 
 function* signInWorker({
   payload,
-}: SingInWorker): Generator<StrictEffect, void, string> {
+}: SingInWorker): Generator<StrictEffect, void, UserData> {
   try {
     yield put(loading(true));
-    const token = yield call(() => fetchSignIn(payload));
+    const user = yield call(() => fetchSignIn(payload));
 
-    if (!token) {
+    if (!user.token) {
       Alert.alert('The email or password is incorrect');
     } else {
-      yield put(authorized({status: true, token}));
+      yield put(authorized({status: true, user}));
       yield put(getAllColumns());
     }
     yield put(loading(false));
@@ -32,7 +32,7 @@ function* signInWorker({
 
 async function fetchSignIn(user: SignInData) {
   return await (await instance()).post('auth/sign-in', user).then(response => {
-    return response.data.token;
+    return response.data;
   });
 }
 

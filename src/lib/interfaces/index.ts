@@ -9,3 +9,4 @@ export type {PrayerUpdateData} from './PrayerUpdateData';
 export type {CommentActionData} from './CommentActionData';
 export type {CommentUpdateData} from './CommentUpdateData';
 export type {CommentData} from './CommentData';
+export type {UserData} from './UserData';

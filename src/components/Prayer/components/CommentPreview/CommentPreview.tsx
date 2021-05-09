@@ -1,5 +1,5 @@
 import {CommentData} from 'lib/interfaces';
-import React, {useState} from 'react';
+import React, {useMemo, useState} from 'react';
 import {
   Text,
   StyleSheet,
@@ -11,12 +11,20 @@ import {
 import {Form, Field} from 'react-final-form';
 import {Swipeable, TextInput} from 'react-native-gesture-handler';
 import {deleteComment, updateComment} from '@store/sagas';
-import {useAppDispatch} from '@lib/hooks';
+import {useAppDispatch, useAppSelector} from '@lib/hooks';
 import {UserIcon} from '@assets/images/svg/UserIcon';
+import {timeAgo} from '@lib/utils';
 
 const CommentPreview: React.FC<{comment: CommentData}> = ({comment}) => {
   const [isVisibleInput, setIsVisibleInput] = useState(false);
   const dispatch = useAppDispatch();
+  const {
+    user: {name},
+  } = useAppSelector(state => state.auth);
+
+  const commentTimeAgo = useMemo(() => timeAgo(Date.parse(comment.created)), [
+    comment.created,
+  ]);
 
   const renderRightActions = () => {
     return (
@@ -78,10 +86,10 @@ const CommentPreview: React.FC<{comment: CommentData}> = ({comment}) => {
               <View style={styles.commentItemsWrap}>
                 <View style={styles.commentInfo}>
                   <Text style={[styles.commentText, styles.commentUserName]}>
-                    Anna Barber
+                    {name}
                   </Text>
                   <Text style={[styles.commentText, styles.commentDate]}>
-                    2 days ago
+                    {commentTimeAgo} ago
                   </Text>
                 </View>
                 <Text numberOfLines={1} style={styles.commentText}>

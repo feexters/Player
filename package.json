@@ -19,6 +19,7 @@
     "axios": "^0.21.1",
     "babel-plugin-module-resolver": "^4.1.0",
     "final-form": "^4.20.2",
+    "moment": "^2.29.1",
     "react": "17.0.1",
     "react-final-form": "^6.5.3",
     "react-native": "0.64.0",
