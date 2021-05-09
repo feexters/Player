@@ -2,7 +2,7 @@ import {put, takeEvery, call, StrictEffect} from 'redux-saga/effects';
 import {COMMENTS_GET_ALL} from '../actions';
 import {CommentData} from '@lib/interfaces';
 import {loading, setComment} from '@store/slices';
-import {instance} from '@lib/utils/instance';
+import {fetchAllComments} from '../axios';
 
 function* getAllCommentsWorker(): Generator<StrictEffect, void, CommentData[]> {
   try {
@@ -13,13 +13,6 @@ function* getAllCommentsWorker(): Generator<StrictEffect, void, CommentData[]> {
   } catch (e) {
     console.error(e);
   }
-}
-
-async function fetchAllComments(): Promise<CommentData[]> {
-  return await (await instance())
-    .get('comments')
-    .then(response => response.data)
-    .catch(e => console.log(e));
 }
 
 export function* watchGetAllComments() {

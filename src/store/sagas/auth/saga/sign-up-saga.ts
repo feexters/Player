@@ -4,7 +4,7 @@ import {AUTH_SIGN_UP} from '../actions/actions';
 import {SignUpData} from '@lib/interfaces';
 import {authSingIn} from '../actions';
 import {loading} from '@store/slices';
-import {instance} from '@lib/utils/instance';
+import {fetchSignUp} from '../axios';
 
 export interface SingUpWorker {
   type: string;
@@ -27,15 +27,6 @@ function* signUpWorker({
   } catch (e) {
     console.error(e);
   }
-}
-
-async function fetchSignUp(user: SignUpData) {
-  return await (await instance())
-    .post('auth/sign-up', user)
-    .then(response => {
-      return response.data.name;
-    })
-    .catch(e => console.log(e));
 }
 
 export function* watchSignUp() {

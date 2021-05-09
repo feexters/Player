@@ -2,7 +2,7 @@ import {put, takeEvery, call, StrictEffect} from 'redux-saga/effects';
 import {PRAYERS_GET_ALL} from '../actions';
 import {PrayerData} from '@lib/interfaces';
 import {loading, setPrayers} from '@store/slices';
-import {instance} from '@lib/utils/instance';
+import {fetchAllPrayers} from '../axios';
 
 function* getAllPrayersWorker(): Generator<StrictEffect, void, PrayerData[]> {
   try {
@@ -13,13 +13,6 @@ function* getAllPrayersWorker(): Generator<StrictEffect, void, PrayerData[]> {
   } catch (e) {
     console.error(e);
   }
-}
-
-async function fetchAllPrayers(): Promise<PrayerData[]> {
-  return await (await instance())
-    .get('prayers')
-    .then(response => response.data)
-    .catch(e => console.log(e));
 }
 
 export function* watchGetAllPrayers() {

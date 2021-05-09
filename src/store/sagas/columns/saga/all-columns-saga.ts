@@ -2,7 +2,7 @@ import {put, takeEvery, call, StrictEffect} from 'redux-saga/effects';
 import {COLUMNS_GET_ALL} from '../actions/actions';
 import {ColumnData} from '@lib/interfaces';
 import {loading, setColumns} from '@store/slices';
-import {instance} from '@lib/utils/instance';
+import {fetchAllColumns} from '../axios';
 
 function* getAllColumnsWorker(): Generator<StrictEffect, void, ColumnData[]> {
   try {
@@ -13,13 +13,6 @@ function* getAllColumnsWorker(): Generator<StrictEffect, void, ColumnData[]> {
   } catch (e) {
     console.error(e);
   }
-}
-
-async function fetchAllColumns(): Promise<ColumnData[]> {
-  return await (await instance())
-    .get('columns')
-    .then(response => response.data)
-    .catch(e => console.log(e));
 }
 
 export function* watchGetAllColumns() {

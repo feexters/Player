@@ -1,7 +1,7 @@
 import {put, takeEvery, call} from 'redux-saga/effects';
 import {COLUMNS_DELETE, getAllColumns} from '../actions';
 import {loading} from '@store/slices';
-import {instance} from '@lib/utils/instance';
+import {fetchDeleteColumn} from '../axios';
 
 interface DeleteColumnWorker {
   type: string;
@@ -17,12 +17,6 @@ function* deleteColumnWorker({payload}: DeleteColumnWorker) {
   } catch (e) {
     console.error(e);
   }
-}
-
-async function fetchDeleteColumn(id: number) {
-  return await (await instance())
-    .delete(`columns/${id}`)
-    .catch(e => console.log(e));
 }
 
 export function* watchDeleteColumn() {

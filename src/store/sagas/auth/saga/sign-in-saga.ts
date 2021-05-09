@@ -4,7 +4,7 @@ import {authorized, loading} from '@store/slices';
 import {AUTH_SIGN_IN} from '../actions';
 import {SignInData, UserData} from '@lib/interfaces';
 import {getAllColumns} from '@store/sagas/columns';
-import {instance} from '@lib/utils/instance';
+import {fetchSignIn} from '../axios';
 
 export interface SingInWorker {
   type: string;
@@ -28,12 +28,6 @@ function* signInWorker({
   } catch (e) {
     console.error(e);
   }
-}
-
-async function fetchSignIn(user: SignInData) {
-  return await (await instance()).post('auth/sign-in', user).then(response => {
-    return response.data;
-  });
 }
 
 export function* watchSignIn() {

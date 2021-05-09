@@ -1,7 +1,7 @@
 import {put, takeEvery, call, StrictEffect} from 'redux-saga/effects';
 import {PRAYERS_GET_BY_ID} from '../actions';
 import {loading, setDateForCurrentPrayer} from '@store/slices';
-import {instance} from '@lib/utils/instance';
+import {fetchPrayer} from '../axios';
 
 interface GetPrayerWorker {
   type: string;
@@ -19,13 +19,6 @@ function* getPrayerWorker({
   } catch (e) {
     console.error(e);
   }
-}
-
-async function fetchPrayer(id: number): Promise<string> {
-  return await (await instance())
-    .get(`prayers/${id}`)
-    .then(response => response.headers.date)
-    .catch(e => console.log(e));
 }
 
 export function* watchGetPrayer() {

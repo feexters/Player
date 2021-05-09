@@ -3,7 +3,7 @@ import {COLUMNS_CREATE} from '../actions/actions';
 import {ColumnData} from '@lib/interfaces';
 import {addColumn, loading} from '@store/slices';
 import {ColumnActionData} from '@lib/interfaces/ColumnActionData';
-import {instance} from '@lib/utils/instance';
+import {fetchCreateColumn} from '../axios';
 
 interface CreateColumnWorker {
   type: string;
@@ -21,15 +21,6 @@ function* createColumnWorker({
   } catch (e) {
     console.error(e);
   }
-}
-
-async function fetchCreateColumn(
-  column: ColumnActionData,
-): Promise<ColumnData> {
-  return await (await instance())
-    .post('/columns', column)
-    .then(response => response.data)
-    .catch(e => console.log(e));
 }
 
 export function* watchCreateColumn() {

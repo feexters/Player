@@ -1,7 +1,7 @@
 import {put, takeEvery, call} from 'redux-saga/effects';
 import {PRAYERS_DELETE, getAllPrayers} from '../actions';
 import {loading} from '@store/slices';
-import {instance} from '@lib/utils/instance';
+import {fetchDeletePrayer} from '../axios';
 
 interface DeletePrayerWorker {
   type: string;
@@ -17,12 +17,6 @@ function* deletePrayerWorker({payload}: DeletePrayerWorker) {
   } catch (e) {
     console.error(e);
   }
-}
-
-async function fetchDeletePrayer(id: number) {
-  return await (await instance())
-    .delete(`prayers/${id}`)
-    .catch(e => console.log(e));
 }
 
 export function* watchDeletePrayer() {

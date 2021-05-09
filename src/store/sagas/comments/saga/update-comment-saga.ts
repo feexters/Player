@@ -2,7 +2,7 @@ import {put, takeEvery, call} from 'redux-saga/effects';
 import {COMMENTS_UPDATE, getAllComments} from '../actions';
 import {CommentUpdateData} from '@lib/interfaces';
 import {loading} from '@store/slices';
-import {instance} from '@lib/utils/instance';
+import {fetchUpdateComment} from '../axios';
 
 interface UpdateCommentWorker {
   type: string;
@@ -18,12 +18,6 @@ function* updateCommentWorker({payload}: UpdateCommentWorker) {
   } catch (e) {
     console.error(e);
   }
-}
-
-async function fetchUpdateComment(comment: CommentUpdateData) {
-  return await (await instance())
-    .put(`comments/${comment.id}`, {body: comment.body})
-    .catch(e => console.log(e));
 }
 
 export function* watchUpdateComment() {

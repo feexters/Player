@@ -3,7 +3,7 @@ import {PRAYERS_CREATE} from '../actions';
 import {PrayerData} from '@lib/interfaces';
 import {addPrayer, loading} from '@store/slices';
 import {PrayerActionData} from '@lib/interfaces';
-import {instance} from '@lib/utils/instance';
+import {fetchCreatePrayer} from '../axios';
 
 interface CreatePrayerWorker {
   type: string;
@@ -21,20 +21,6 @@ function* createPrayerWorker({
   } catch (e) {
     console.error(e);
   }
-}
-
-async function fetchCreatePrayer(
-  prayer: PrayerActionData,
-): Promise<PrayerData> {
-  const postPrayer = {
-    title: prayer.title,
-    description: prayer.description,
-    checked: prayer.checked,
-  };
-  return await (await instance())
-    .post(`columns/${prayer.columnId}/prayers`, postPrayer)
-    .then(response => response.data)
-    .catch(e => console.log(e));
 }
 
 export function* watchCreatePrayer() {

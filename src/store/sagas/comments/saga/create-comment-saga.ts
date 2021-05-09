@@ -3,7 +3,7 @@ import {COMMENTS_CREATE} from '../actions';
 import {CommentData} from '@lib/interfaces';
 import {addComment, loading} from '@store/slices';
 import {CommentActionData} from '@lib/interfaces';
-import {instance} from '@lib/utils/instance';
+import {fetchCreateComment} from '../axios';
 
 interface CreateCommentWorker {
   type: string;
@@ -21,15 +21,6 @@ function* createCommentWorker({
   } catch (e) {
     console.error(e);
   }
-}
-
-async function fetchCreateComment(
-  comment: CommentActionData,
-): Promise<CommentData> {
-  return await (await instance())
-    .post(`prayers/${comment.prayerId}/comments`, {body: comment.body})
-    .then(response => response.data)
-    .catch(e => console.log(e));
 }
 
 export function* watchCreateComment() {

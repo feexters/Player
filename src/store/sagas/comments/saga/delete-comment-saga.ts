@@ -1,7 +1,7 @@
 import {put, takeEvery, call} from 'redux-saga/effects';
 import {COMMENTS_DELETE, getAllComments} from '../actions';
 import {loading} from '@store/slices';
-import {instance} from '@lib/utils/instance';
+import {fetchDeleteComment} from '../axios';
 
 interface DeleteCommentWorker {
   type: string;
@@ -17,12 +17,6 @@ function* deleteCommentWorker({payload}: DeleteCommentWorker) {
   } catch (e) {
     console.error(e);
   }
-}
-
-async function fetchDeleteComment(id: number) {
-  return await (await instance())
-    .delete(`comments/${id}`)
-    .catch(e => console.log(e));
 }
 
 export function* watchDeleteComment() {
